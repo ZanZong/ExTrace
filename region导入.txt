@@ -1,0 +1,23 @@
+
+mysql -uroot -pzzuxq  --default-character-set=utf8
+DROP DATABASE ExTrace;
+CREATE DATABASE ExTrace DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+use ExTrace;
+source C:/JavaDevTools/workspace/TestCxfHibernate/ExTrace.sql;
+load data local infile "C:/JavaDevTools/workspace/TestCxfHibernate/region.txt" into table region fields terminated by ','  lines terminated by '\n' (regioncode,prv,cty,twn,stage);
+update region set regioncode='110000' where prv='北京市';
+
+insert into transnode(id,NodeName,NodeType,RegionCode,TelCode) select CONCAT(RegionCode,'00'),CONCAT(Twn,'网点'),0,RegionCode,CONCAT('18601',RegionCode) from region where stage=3;
+
+load data infile "C:/JavaDevTools/workspace/TestCxfHibernate/userinfo.txt" into table extrace.userinfo;
+load data infile "C:/JavaDevTools/workspace/TestCxfHibernate/customerinfo.txt" into table extrace.customerinfo;
+load data infile "C:/JavaDevTools/workspace/TestCxfHibernate/transpackage.txt" into table extrace.transpackage;
+
+导入这些数据就可建运单了
+
+
+
+//导出数据
+select * from userinfo into outfile "C:/JavaDevTools/workspace/TestCxfHibernate/userinfo.txt";
+select * from customerinfo into outfile "C:/JavaDevTools/workspace/TestCxfHibernate/customerinfo.txt";
+select * from transpackage into outfile "C:/JavaDevTools/workspace/TestCxfHibernate/transpackage.txt";
