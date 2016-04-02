@@ -37,7 +37,6 @@ public class BaseDao<T,PK extends Serializable> extends HibernateDaoSupport impl
 
 	@Override
 	public T get(PK id) {
-//		System.out.println("BaseDao id:" + id);
 		return getHibernateTemplate().load(getEntityClass(), id);
 	}
 	
@@ -72,7 +71,12 @@ public class BaseDao<T,PK extends Serializable> extends HibernateDaoSupport impl
 
         return (List<T>) getHibernateTemplate().findByCriteria(criteria);
 	}
-
+/*  getHibernateTemplate().findByCriteria(criteria)可以查询不需要分页的数据，
+	getHibernateTemplate().findByCriteria(criteria, firstResult, maxResults)可以用来查询需要的分页的属性，
+  HibernateTemplate ht=this.getHibernateTemplate();
+  DetachedCriteria criteria=DetachedCriteria.forClass(Paper.class);
+  ht.findByCriteria(criteria, firstResult, maxResults);
+ */
 	@Override
 	public List<T> findBy(String propertyName, Object value, String orderBy, boolean isAsc) {
         Assert.hasText(propertyName);
@@ -123,5 +127,4 @@ public class BaseDao<T,PK extends Serializable> extends HibernateDaoSupport impl
 	public void clear() {
 		getHibernateTemplate().clear();
 	}
-	
 }
