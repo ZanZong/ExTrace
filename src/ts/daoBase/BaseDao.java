@@ -57,6 +57,7 @@ public class BaseDao<T,PK extends Serializable> extends HibernateDaoSupport impl
                     DetachedCriteria.forClass(getEntityClass()).addOrder(Order.desc(orderBy)));
 	}
 
+	//前两个参数设置排序，后面可以有多个参数，使用Restriction的方法描述对象
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<T> findBy(String orderBy, boolean isAsc, Criterion... criterions) {
@@ -77,6 +78,7 @@ public class BaseDao<T,PK extends Serializable> extends HibernateDaoSupport impl
   DetachedCriteria criteria=DetachedCriteria.forClass(Paper.class);
   ht.findByCriteria(criteria, firstResult, maxResults);
  */
+	//选择propertyName的值等于value的项，后两个参数为设置排序
 	@Override
 	public List<T> findBy(String propertyName, Object value, String orderBy, boolean isAsc) {
         Assert.hasText(propertyName);
@@ -84,7 +86,7 @@ public class BaseDao<T,PK extends Serializable> extends HibernateDaoSupport impl
         return findBy(orderBy, isAsc, Restrictions.eq(propertyName, value));
         //return createCriteria(orderBy, isAsc, Restrictions.eq(propertyName, value)).list();
 	}
-	
+	//选择propertyName的值含有value的项，后两个参数为设置排序
 	@Override
 	public List<T> findLike(String propertyName, Object value, String orderBy, boolean isAsc) {
         Assert.hasText(propertyName);

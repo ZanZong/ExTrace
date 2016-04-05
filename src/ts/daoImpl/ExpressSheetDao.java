@@ -43,4 +43,7 @@ public class ExpressSheetDao extends BaseDao<ExpressSheet,String> {
 		list = findBy("ID", true, Restrictions.sqlRestriction(sql));		
 		return list;
 	}
+	public void addExpressSheet(ExpressSheet sh){
+		save(sh);
+	}
 }

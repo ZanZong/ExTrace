@@ -6,15 +6,8 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import net.sf.ehcache.util.FindBugsSuppressWarnings;
-
-//一定要导hinerbate的
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-
-import ts.daoBase.BaseDao;
 import ts.daoImpl.CustomerInfoDao;
+import ts.daoImpl.TransPackageDao;
 import ts.model.CustomerInfo;
 
 /**|
@@ -61,9 +54,11 @@ public class AddTest {
 //	}
 	@Resource
 	CustomerInfoDao customerInfoDao;
-	
+	@Resource
+	TransPackageDao transPackageDao;
 	@Test
 	public void fun(){
+		System.out.println(transPackageDao.getDestination("1111112222"));
 	/*	CustomerInfo cus = customerInfoDao.get(1);
 		System.out.println(cus.getName());*/
 		

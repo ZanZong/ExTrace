@@ -66,7 +66,8 @@
 		<property name="regionDao" ref="regionDao"></property>
 	</bean>
 	<bean id="transPackageDao" class="ts.daoImpl.TransPackageDao">
-		<property name="sessionFactory" ref="sessionFactory"></property>
+	  	<property name="sessionFactory" ref="sessionFactory"></property>
+	    <property name="regionDao" ref="regionDao"></property>
 	</bean>
 	<bean id="transHistoryDao" class="ts.daoImpl.TransHistoryDao">
 		<property name="sessionFactory" ref="sessionFactory"></property>

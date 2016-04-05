@@ -56,6 +56,7 @@ public class RegionDao  extends BaseDao<Region, String>{
      * 获取省
      */
 	public List<Region> getProvinceList() {
+		//选择 stage=1的项，按regionCode排序
 		List<Region> listrg = findBy("stage", 1, "regionCode", true);
 		return listrg;
 	}
@@ -64,7 +65,7 @@ public class RegionDao  extends BaseDao<Region, String>{
      * 获取市
      */
 	public List<Region> getCityList(String ID) {
-		String sid = ID.substring(0, 2).concat("%");
+		String sid = ID.substring(0, 2).concat("%");//前两个参数设置排序，后面可以有多个参数，使用Restriction的方法描述对象
 		List<Region> listrg = (List<Region>) findBy("regionCode", true,Restrictions.like("regionCode", sid),Restrictions.eq("stage", 2));
 		return listrg;
 	}
