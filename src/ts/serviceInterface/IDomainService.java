@@ -17,6 +17,10 @@ import ts.model.TransPackage;
 @Path("/Domain")	//业务操作
 public interface IDomainService {
     //快件操作访问接口=======================================================================
+	/**
+	 *JAX-RS 定义了 @POST、@GET、@PUT 和 @DELETE，分别对应 4 种 HTTP 方法
+	 *用于对资源进行创建、检索、更新和删除的操作。 
+	 */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("/getExpressList/{Property}/{Restrictions}/{Value}") 
