@@ -47,7 +47,10 @@
 	</bean>
 	<tx:annotation-driven transaction-manager="transactionManager"
 		proxy-target-class="true" />
-
+	<bean id="PackageRouteDao" class="ts.daoImpl.PackageRouteDao">
+	    <property name="sessionFactory" ref="sessionFactory"></property>
+	    <property name="transPackageContentDao" ref="transPackageContentDao"></property>
+	</bean>
 	<bean id="userInfoDao" class="ts.daoImpl.UserInfoDao">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>

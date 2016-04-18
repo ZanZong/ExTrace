@@ -1,5 +1,6 @@
 package ts.serviceInterface;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -12,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import ts.model.ExpressSheet;
+import ts.model.PackageRoute;
 import ts.model.TransPackage;
 
 @Path("/Domain")	//ÒµÎñ²Ù×÷
@@ -86,5 +88,15 @@ public interface IDomainService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/saveTransPackage") 
 	public Response saveTransPackage(TransPackage obj);
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/savePackageRoutePos")
+    public Response saveRoutePos(PackageRoute packageRoute);
+    
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/getPackageRoutePos/{ExpressSheetid}/{time}")
+    public List<PackageRoute> getPackageRoutePos(@PathParam("ExpressSheetid")String ExpressSheetid, @PathParam("time")String time);
     
 }

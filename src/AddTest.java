@@ -1,4 +1,8 @@
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.annotation.Resource;
 
 import org.junit.Test;
@@ -7,8 +11,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import ts.daoImpl.CustomerInfoDao;
+import ts.daoImpl.PackageRouteDao;
+import ts.daoImpl.TransPackageContentDao;
 import ts.daoImpl.TransPackageDao;
+import ts.daoImpl.UserInfoDao;
 import ts.model.CustomerInfo;
+import ts.model.ExpressSheet;
+import ts.model.PackageRoute;
+import ts.model.TransPackage;
+import ts.model.TransPackageContent;
+import ts.model.UserInfo;
 
 /**|
  * 
@@ -56,9 +68,42 @@ public class AddTest {
 	CustomerInfoDao customerInfoDao;
 	@Resource
 	TransPackageDao transPackageDao;
+	@Resource
+	UserInfoDao userInfoDao;
+	@Resource
+	PackageRouteDao pkgRouteDao;
+	@Resource
+	TransPackageContentDao transPkgConDao;
 	@Test
 	public void fun(){
-		System.out.println(transPackageDao.getDestination("1111112222"));
+		/*PackageRoute pr = new PackageRoute();
+		TransPackage tp = new TransPackage();
+		TransPackageContent transPkgCont = new TransPackageContent();
+		ExpressSheet es = new ExpressSheet();
+		es.setID("10000001");
+		es.setPackageFee((float)20);
+		es.setSender(new CustomerInfo());
+		es.setRecever(new CustomerInfo());
+		es.setStatus(2);
+		
+		tp.setSourceNode("1000");
+		tp.setStatus(2);
+		tp.setTargetNode("1001");
+
+		transPkgCont.setPkg(tp);
+		transPkgCont.setExpress(es);
+		Set<TransPackageContent> s = new HashSet<TransPackageContent>();
+		s.add(transPkgCont);
+		tp.setContent(s);
+		transPkgCont.setPkg(tp);
+		
+		pr.setPkg(tp);
+		pr.setX((float)21.3213);
+		pr.setY((float)42.2312);
+		packageRD.addPackageRoute(pr);*/
+		List<PackageRoute> pkgRouteList =  pkgRouteDao.findPkgRoute("1");
+		System.out.println(pkgRouteList.size());
+		/*System.out.println(transPackageDao.getDestination("1111112222"));*/
 	/*	CustomerInfo cus = customerInfoDao.get(1);
 		System.out.println(cus.getName());*/
 		

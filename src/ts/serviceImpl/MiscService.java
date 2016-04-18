@@ -8,6 +8,7 @@ import javax.ws.rs.core.Response;
 import ts.daoImpl.CustomerInfoDao;
 import ts.daoImpl.RegionDao;
 import ts.daoImpl.TransNodeDao;
+import ts.daoImpl.UserInfoDao;
 import ts.model.CodeNamePair;
 import ts.model.CustomerInfo;
 import ts.model.Region;
@@ -20,6 +21,15 @@ public class MiscService implements IMiscService{
 	private TransNodeDao transNodeDao;
 	private RegionDao regionDao;
 	private CustomerInfoDao customerInfoDao;
+	private UserInfoDao userInfoDao;
+
+	public UserInfoDao getUserInfoDao() {
+		return userInfoDao;
+	}
+
+	public void setUserInfoDao(UserInfoDao userInfoDao) {
+		this.userInfoDao = userInfoDao;
+	}
 
 	public TransNodeDao getTransNodeDao() {
 		return transNodeDao;
@@ -167,7 +177,7 @@ public class MiscService implements IMiscService{
 	@Override
 	public boolean doLogin(int uid, String pwd) {
 		// TODO Auto-generated method stub
-		return false;
+		return userInfoDao.checkUserByID(uid, pwd);
 	}
 
 	@Override

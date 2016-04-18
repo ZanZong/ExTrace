@@ -21,7 +21,6 @@ public class TransPackageContentDao extends BaseDao<TransPackageContent,Integer>
 			return null;
 		return list.get(0);
 	}
-
 	public int getSn(String expressId, String packageId){
 		TransPackageContent cn = get(expressId,packageId);
 		if(cn == null){

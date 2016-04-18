@@ -9,11 +9,13 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 
 import ts.daoImpl.ExpressSheetDao;
+import ts.daoImpl.PackageRouteDao;
 import ts.daoImpl.TransHistoryDao;
 import ts.daoImpl.TransPackageContentDao;
 import ts.daoImpl.TransPackageDao;
 import ts.daoImpl.UserInfoDao;
 import ts.model.ExpressSheet;
+import ts.model.PackageRoute;
 import ts.model.TransHistory;
 import ts.model.TransPackage;
 import ts.model.TransPackageContent;
@@ -25,7 +27,16 @@ public class DomainService implements IDomainService {
 	private TransPackageDao transPackageDao;
 	private TransHistoryDao transHistoryDao;
 	private TransPackageContentDao transPackageContentDao;
+	private PackageRouteDao packageRouteDao;
 	
+	public PackageRouteDao getPackageRouteDao() {
+		return packageRouteDao;
+	}
+
+	public void setPackageRouteDao(PackageRouteDao packageRouteDao) {
+		this.packageRouteDao = packageRouteDao;
+	}
+
 	private UserInfoDao userInfoDao;
 	
 	public ExpressSheetDao getExpressSheetDao() {
@@ -316,5 +327,32 @@ public class DomainService implements IDomainService {
 		{
 			return Response.serverError().entity(e.getMessage()).build(); 
 		}
+	}
+
+	@Override
+	public Response saveRoutePos(PackageRoute packageRoute) {
+		// TODO Auto-generated method stub
+		try{
+			packageRouteDao.addPackageRoute(packageRoute);
+			return Response.ok().header("EntityClass", "R_TransPackage").build(); 
+		}
+		catch(Exception e)
+		{
+			return Response.serverError().entity(e.getMessage()).build(); 
+		}
+	}
+
+	@Override
+	public List<PackageRoute> getPackageRoutePos(String ExpressSheetID) {
+		// TODO Auto-generated method stub
+		List<PackageRoute> items = new ArrayList<PackageRoute>();
+		try{
+			items = packageRouteDao.findPkgRoute(ExpressSheetID);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return items;
 	}
 }
