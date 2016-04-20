@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 import ts.daoImpl.ExpressSheetDao;
@@ -343,16 +344,10 @@ public class DomainService implements IDomainService {
 	}
 
 	@Override
-	public List<PackageRoute> getPackageRoutePos(String ExpressSheetID) {
+	public List<PackageRoute> getPackageRoutePos(String ExpressSheetid, String time) {
 		// TODO Auto-generated method stub
-		List<PackageRoute> items = new ArrayList<PackageRoute>();
-		try{
-			items = packageRouteDao.findPkgRoute(ExpressSheetID);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		return items;
+		return null;
 	}
+
+	
 }

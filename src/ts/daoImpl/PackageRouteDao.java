@@ -6,7 +6,16 @@ import ts.daoBase.BaseDao;
 import ts.model.PackageRoute;
 
 public class PackageRouteDao extends BaseDao<PackageRoute, String>{
-	public TransPackageContentDao transPkgContDao;
+	public TransPackageContentDao transPackageContentDao;
+	
+	public TransPackageContentDao getTransPackageContentDao() {
+		return transPackageContentDao;
+	}
+
+	public void setTransPackageContentDao(TransPackageContentDao transPackageContentDao) {
+		this.transPackageContentDao = transPackageContentDao;
+	}
+
 	public PackageRouteDao(){
 		super(PackageRoute.class);
 	}

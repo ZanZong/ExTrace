@@ -47,7 +47,10 @@
 	</bean>
 	<tx:annotation-driven transaction-manager="transactionManager"
 		proxy-target-class="true" />
-	<bean id="PackageRouteDao" class="ts.daoImpl.PackageRouteDao">
+	<bean id="transPackageContentDao" class="ts.daoImpl.TransPackageContentDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="packageRouteDao" class="ts.daoImpl.PackageRouteDao">
 	    <property name="sessionFactory" ref="sessionFactory"></property>
 	    <property name="transPackageContentDao" ref="transPackageContentDao"></property>
 	</bean>
@@ -75,9 +78,7 @@
 	<bean id="transHistoryDao" class="ts.daoImpl.TransHistoryDao">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
-	<bean id="transPackageContentDao" class="ts.daoImpl.TransPackageContentDao">
-		<property name="sessionFactory" ref="sessionFactory"></property>
-	</bean>
+	
 
 	<!-- REST服务的注解例子 -->
 	<jaxrs:server id="Service" address="/REST">
