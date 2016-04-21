@@ -334,7 +334,7 @@ public class DomainService implements IDomainService {
 	public Response saveRoutePos(PackageRoute packageRoute) {
 		// TODO Auto-generated method stub
 		try{
-			packageRouteDao.addPackageRoute(packageRoute);
+			packageRouteDao.save(packageRoute);
 			return Response.ok().header("EntityClass", "R_TransPackage").build(); 
 		}
 		catch(Exception e)

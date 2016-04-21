@@ -5,7 +5,7 @@ import java.util.List;
 import ts.daoBase.BaseDao;
 import ts.model.PackageRoute;
 
-public class PackageRouteDao extends BaseDao<PackageRoute, String>{
+public class PackageRouteDao extends BaseDao<PackageRoute, Integer>{
 	public TransPackageContentDao transPackageContentDao;
 	
 	public TransPackageContentDao getTransPackageContentDao() {
@@ -20,8 +20,12 @@ public class PackageRouteDao extends BaseDao<PackageRoute, String>{
 		super(PackageRoute.class);
 	}
 	
-	public void addPackageRoute(PackageRoute pkgRoute){
-		save(pkgRoute);
+	public void addPackageRoute(PackageRoute packageRoute){
+		if(packageRoute == null){
+			System.out.println("packageRoute is null\n\n");
+			return;
+		}
+		super.save(packageRoute);
 	}
 	public List<PackageRoute> findPkgRoute(String ExpressSheetID){
 		
