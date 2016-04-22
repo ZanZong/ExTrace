@@ -46,7 +46,7 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	<tx:annotation-driven transaction-manager="transactionManager"
-		proxy-target-class="true" />
+		proxy-target-class="true" /><!-- 强制使用CGLIB -->
 	<bean id="transPackageContentDao" class="ts.daoImpl.TransPackageContentDao">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
@@ -89,6 +89,7 @@
 				<property name="customerInfoDao" ref="customerInfoDao"></property>
 			</bean>
 			<bean class="ts.serviceImpl.DomainService">
+			    <property name="packageRouteDao" ref="packageRouteDao"></property>
 				<property name="expressSheetDao" ref="expressSheetDao"></property>	<!-- 配置DomainService中的属性dao -->
 				<property name="transPackageDao" ref="transPackageDao"></property>
 				<property name="transHistoryDao" ref="transHistoryDao"></property>

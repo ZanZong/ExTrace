@@ -18,7 +18,7 @@ public class CustomerInfoDao extends BaseDao<CustomerInfo, Integer>{
 	public CustomerInfoDao(){
 		super(CustomerInfo.class);
 	}
-	
+	 
 	public CustomerInfo get(int id) {
 		CustomerInfo ci = super.get(id);
 		ci.setRegionString(regionDao.getRegionNameByID(ci.getRegionCode()));	//获取区域的名字字符串

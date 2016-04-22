@@ -99,4 +99,8 @@ public interface IDomainService {
     @Path("/getPackageRoutePos/{ExpressSheetid}/{time}")
     public List<PackageRoute> getPackageRoutePos(@PathParam("ExpressSheetid")String ExpressSheetid, @PathParam("time")String time);
     
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/getPostCode/{pro}/{city}/{town}")
+    public String getPostCode(@PathParam("pro")String pro, @PathParam("city")String city, @PathParam("town")String town);
 }

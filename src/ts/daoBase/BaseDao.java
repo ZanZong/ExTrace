@@ -97,36 +97,67 @@ public class BaseDao<T,PK extends Serializable> extends HibernateDaoSupport impl
 	
 	@Override
 	public void save(T entity) {
-		getHibernateTemplate().saveOrUpdate(entity);
+		/*getHibernateTemplate().saveOrUpdate(entity);*/
+		 try {
+			 getHibernateTemplate().save(entity);
+			  } catch (RuntimeException re) {
+			  re.printStackTrace();
+			  }
+		
 	}
 	
 	@Override
 	public void update(T entity) {
+		try {
 		getHibernateTemplate().update(entity);
+		 } catch (RuntimeException re) {
+			  re.printStackTrace();
+			  }
 	}
 	
 	@Override
 	public void remove(T entity) {
+		try{
 		getHibernateTemplate().delete(entity);
+	 	} catch (RuntimeException re) {
+		  re.printStackTrace();
+		  }
 	}
 	
 	@Override
 	public void removeById(PK id) {
+		try{
 		remove(get(id));
+		 } catch (RuntimeException re) {
+			  re.printStackTrace();
+			  }
 	}
 	
 	@Override
 	public void evit(T entity) {
-		getHibernateTemplate().evict(entity);
+		try{		
+			getHibernateTemplate().evict(entity);
+			} catch (RuntimeException re) {
+			  re.printStackTrace();
+		}
+		
 	}
 	
 	@Override
 	public void flush() {
+		try{
 		getHibernateTemplate().flush();
+		 } catch (RuntimeException re) {
+			  re.printStackTrace();
+			  }
 	}
 	
 	@Override
 	public void clear() {
+		try{
 		getHibernateTemplate().clear();
+		 } catch (RuntimeException re) {
+			  re.printStackTrace();
+			  }
 	}
 }

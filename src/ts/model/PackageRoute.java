@@ -48,7 +48,7 @@ public class PackageRoute implements Serializable {
 	@Column(name="y", nullable=false)
 	private float y;
 	
-	@Column(name="tm", nullable=false)
+	@Column(name="tm", nullable=true)
 	private Date tm;
 	
 	public void setSN(int value) {

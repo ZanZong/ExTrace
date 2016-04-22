@@ -329,7 +329,7 @@ public class DomainService implements IDomainService {
 			return Response.serverError().entity(e.getMessage()).build(); 
 		}
 	}
-
+//////////////need to write
 	@Override
 	public Response saveRoutePos(PackageRoute packageRoute) {
 		// TODO Auto-generated method stub
@@ -345,6 +345,12 @@ public class DomainService implements IDomainService {
 
 	@Override
 	public List<PackageRoute> getPackageRoutePos(String ExpressSheetid, String time) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getPostCode(String pro, String city, String town) {
 		// TODO Auto-generated method stub
 		return null;
 	}
