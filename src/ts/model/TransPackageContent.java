@@ -4,6 +4,11 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import org.apache.cxf.aegis.type.java5.IgnoreProperty;
+
+import com.sun.xml.internal.ws.util.Pool.Unmarshaller;
 @Entity
 @org.hibernate.annotations.Proxy(lazy=false)
 @Table(name="TransPackageContent")
@@ -30,8 +35,8 @@ public class TransPackageContent implements Serializable {
 	
 	@ManyToOne(targetEntity=TransPackage.class, fetch=FetchType.LAZY)	
 	@org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.LOCK})	
-	@JoinColumns({ @JoinColumn(name="PackageID", referencedColumnName="ID", nullable=false) })	
-	private TransPackage pkg;
+	@JoinColumns({ @JoinColumn(name="PackageID", referencedColumnName="ID", nullable=false) })
+	@XmlTransient private TransPackage pkg;
 
 	@Column(name="Status", nullable=false, length=10)	
 	private int status;
@@ -55,14 +60,16 @@ public class TransPackageContent implements Serializable {
 	public ExpressSheet getExpress() {
 		return express;
 	}
-	
-	public void setPkg(TransPackage value) {
-		this.pkg = value;
-	}
-	
+  
 	public TransPackage getPkg() {
 		return pkg;
 	}
+    public void setPkg(TransPackage value) {
+		this.pkg = value;
+	}
+    public void afterUnmarshal(Unmarshaller u, Object parent) {  
+        this.pkg = (TransPackage) parent;  
+    }
 	
 	public void setStatus(int value) {
 		this.status = value;
@@ -102,4 +109,6 @@ public class TransPackageContent implements Serializable {
 		public static final int STATUS_ACTIVE = 0;
 		public static final int STATUS_OUTOF_PACKAGE = 1;
 	}
+	
+	 	
 }

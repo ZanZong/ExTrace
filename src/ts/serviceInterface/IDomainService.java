@@ -89,15 +89,20 @@ public interface IDomainService {
     @Path("/saveTransPackage") 
 	public Response saveTransPackage(TransPackage obj);
     
-    @POST
+    @GET
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/savePackageRoutePos")
-    public Response saveRoutePos(PackageRoute packageRoute);
+    @Path("/savePackageRoutePos/{packagetRouteId}/{x}/{y}")
+    public Response saveRoutePos(@PathParam("packagetRouteId")String packagetRouteId,@PathParam("x")double x,@PathParam("y")double y);
     
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/getPackageRoutePos/{ExpressSheetid}/{time}")
     public List<PackageRoute> getPackageRoutePos(@PathParam("ExpressSheetid")String ExpressSheetid, @PathParam("time")String time);
+    
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/getPackageRoutePos/{ExpressSheetid}")
+    public List<PackageRoute> getPackageRoutePos(@PathParam("ExpressSheetid")String ExpressSheetid);
     
     @GET
     @Consumes(MediaType.APPLICATION_JSON)

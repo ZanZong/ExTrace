@@ -15,9 +15,14 @@ package ts.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import com.sun.xml.internal.ws.util.Pool.Unmarshaller;
+
 @Entity
 @org.hibernate.annotations.Proxy(lazy=false)
 @Table(name="TransPackage")
@@ -49,7 +54,7 @@ public class TransPackage implements Serializable {
 	@Column(name="Status", nullable=true, length=4)	
 	private Integer status;
 	
-	@OneToMany(mappedBy="pkg", targetEntity=PackageRoute.class)	
+	@OneToMany(mappedBy="pkg", targetEntity=PackageRoute.class,fetch=FetchType.EAGER)	
 	@org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.LOCK})	
 	@org.hibernate.annotations.LazyCollection(org.hibernate.annotations.LazyCollectionOption.TRUE)	
 	private java.util.Set<PackageRoute> route = new java.util.HashSet<PackageRoute>();
@@ -58,12 +63,12 @@ public class TransPackage implements Serializable {
 	@org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.LOCK})	
 	private UsersPackage user;
 	
-	@OneToMany(mappedBy="pkg", targetEntity=TransPackageContent.class)	
+	@OneToMany(mappedBy="pkg", targetEntity=TransPackageContent.class,fetch=FetchType.EAGER)	
 	@org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.LOCK})	
 	@org.hibernate.annotations.LazyCollection(org.hibernate.annotations.LazyCollectionOption.TRUE)	
 	private java.util.Set<TransPackageContent> content = new java.util.HashSet<TransPackageContent>();
 	
-	@OneToMany(mappedBy="pkg", targetEntity=TransHistory.class)	
+	@OneToMany(mappedBy="pkg", targetEntity=TransHistory.class,fetch=FetchType.EAGER)	
 	@org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.LOCK})	
 	@org.hibernate.annotations.LazyCollection(org.hibernate.annotations.LazyCollectionOption.TRUE)	
 	private java.util.Set<TransHistory> history = new java.util.HashSet<TransHistory>();
@@ -191,5 +196,4 @@ public class TransPackage implements Serializable {
 	public boolean isSaved() {
 		return _saved;
 	}
-	
 }

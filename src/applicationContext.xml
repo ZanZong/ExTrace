@@ -53,6 +53,7 @@
 	<bean id="packageRouteDao" class="ts.daoImpl.PackageRouteDao">
 	    <property name="sessionFactory" ref="sessionFactory"></property>
 	    <property name="transPackageContentDao" ref="transPackageContentDao"></property>
+	    <property name="transPackageDao" ref="transPackageDao"></property>
 	</bean>
 	<bean id="userInfoDao" class="ts.daoImpl.UserInfoDao">
 		<property name="sessionFactory" ref="sessionFactory"></property>
@@ -74,7 +75,9 @@
 	<bean id="transPackageDao" class="ts.daoImpl.TransPackageDao">
 	  	<property name="sessionFactory" ref="sessionFactory"></property>
 	    <property name="regionDao" ref="regionDao"></property>
-	</bean>
+		<property name="transPackageContentDao" ref="transPackageContentDao"></property>
+		<property name="expressSheetDao" ref="expressSheetDao"></property>
+	 </bean>
 	<bean id="transHistoryDao" class="ts.daoImpl.TransHistoryDao">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>

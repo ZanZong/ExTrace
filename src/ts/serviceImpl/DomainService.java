@@ -331,10 +331,15 @@ public class DomainService implements IDomainService {
 	}
 //////////////need to write
 	@Override
-	public Response saveRoutePos(PackageRoute packageRoute) {
+	public Response saveRoutePos(String packagetRouteId, double x, double y) {
 		// TODO Auto-generated method stub
+		PackageRoute pr = new PackageRoute();
 		try{
-			packageRouteDao.save(packageRoute);
+			pr.setPkg(transPackageDao.get(packagetRouteId));
+			pr.setX((float)x);
+			pr.setY((float)y);
+			pr.setTm(new Date());
+			packageRouteDao.save(pr);
 			return Response.ok().header("EntityClass", "R_TransPackage").build(); 
 		}
 		catch(Exception e)
@@ -346,6 +351,8 @@ public class DomainService implements IDomainService {
 	@Override
 	public List<PackageRoute> getPackageRoutePos(String ExpressSheetid, String time) {
 		// TODO Auto-generated method stub
+	//	List<PackageRoute> prList = packageRouteDao.findPkgRoute(ExpressSheetid);
+		
 		return null;
 	}
 
@@ -355,5 +362,10 @@ public class DomainService implements IDomainService {
 		return null;
 	}
 
-	
+	@Override
+	public List<PackageRoute> getPackageRoutePos(String ExpressSheetid) {
+		// TODO Auto-generated method stub
+		 return packageRouteDao.findPkgRoute(ExpressSheetid);
+	}
+
 }
