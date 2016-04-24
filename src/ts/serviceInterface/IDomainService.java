@@ -4,13 +4,17 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.hibernate.annotations.Parameter;
 
 import ts.model.ExpressSheet;
 import ts.model.PackageRoute;
@@ -108,4 +112,10 @@ public interface IDomainService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/getPostCode/{pro}/{city}/{town}")
     public String getPostCode(@PathParam("pro")String pro, @PathParam("city")String city, @PathParam("town")String town);
+ 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/getString")
+    public String getString(String shihu);
+    
 }

@@ -9,6 +9,10 @@ import java.util.List;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.logging.Log;
+
+import com.google.gson.Gson;
+
 import ts.daoImpl.ExpressSheetDao;
 import ts.daoImpl.PackageRouteDao;
 import ts.daoImpl.TransHistoryDao;
@@ -368,4 +372,20 @@ public class DomainService implements IDomainService {
 		 return packageRouteDao.findPkgRoute(ExpressSheetid);
 	}
 
+	@Override
+	public String getString(String shihu) {
+		// TODO Auto-generated method stub
+	/*	try{
+			return Response.ok(shihu+"shabishabi").header("EntityClass", "String").build(); 
+		}
+		catch(Exception e)
+		{
+			return Response.serverError().entity(e.getMessage()).build(); 
+		}
+	}*/
+		System.out.println(shihu);
+		Gson g = new Gson();
+		g.fromJson(shihu, String.class);
+		return shihu+" hahaha";
+	}
 }
