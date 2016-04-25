@@ -1,5 +1,7 @@
 package ts.daoImpl;
-
+/**
+ * @author Zongzan
+ */
 import java.util.List;
 
 import org.hibernate.criterion.Restrictions;

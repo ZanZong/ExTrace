@@ -19,6 +19,7 @@ import org.hibernate.annotations.Parameter;
 import ts.model.ExpressSheet;
 import ts.model.PackageRoute;
 import ts.model.TransPackage;
+import ts.smodel.LocXY;
 
 @Path("/Domain")	//ÒµÎñ²Ù×÷
 public interface IDomainService {
@@ -101,18 +102,18 @@ public interface IDomainService {
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/getPackageRoutePos/{ExpressSheetid}/{time}")
-    public List<PackageRoute> getPackageRoutePos(@PathParam("ExpressSheetid")String ExpressSheetid, @PathParam("time")String time);
+    public List<LocXY> getPackageRoutePos(@PathParam("ExpressSheetid")String ExpressSheetid, @PathParam("time")String time);
     
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/getPackageRoutePos/{ExpressSheetid}")
-    public List<PackageRoute> getPackageRoutePos(@PathParam("ExpressSheetid")String ExpressSheetid);
+    public List<LocXY> getPackageRoutePos(@PathParam("ExpressSheetid")String ExpressSheetid);
     
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/getPostCode/{pro}/{city}/{town}")
     public String getPostCode(@PathParam("pro")String pro, @PathParam("city")String city, @PathParam("town")String town);
- 
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/getString")

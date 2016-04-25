@@ -1,5 +1,7 @@
 package ts.daoImpl;
-
+/**
+ * @author Zongzan
+ */
 import ts.daoBase.BaseDao;
 import ts.model.TransHistory;
 

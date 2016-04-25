@@ -142,7 +142,6 @@ public class TransPackage implements Serializable {
 		return content;
 	}
 	
-	
 	public void setHistory(java.util.Set<TransHistory> value) {
 		this.history = value;
 	}

@@ -25,6 +25,7 @@ import ts.model.TransHistory;
 import ts.model.TransPackage;
 import ts.model.TransPackageContent;
 import ts.serviceInterface.IDomainService;
+import ts.smodel.LocXY;
 
 public class DomainService implements IDomainService {
 	
@@ -353,10 +354,9 @@ public class DomainService implements IDomainService {
 	}
 
 	@Override
-	public List<PackageRoute> getPackageRoutePos(String ExpressSheetid, String time) {
+	public List<LocXY> getPackageRoutePos(String ExpressSheetid, String time) {
 		// TODO Auto-generated method stub
-	//	List<PackageRoute> prList = packageRouteDao.findPkgRoute(ExpressSheetid);
-		
+		//List<PackageRoute> prList = packageRouteDao.findPkgRoute(ExpressSheetid);
 		return null;
 	}
 
@@ -367,9 +367,14 @@ public class DomainService implements IDomainService {
 	}
 
 	@Override
-	public List<PackageRoute> getPackageRoutePos(String ExpressSheetid) {
+	public List<LocXY> getPackageRoutePos(String ExpressSheetid) {
 		// TODO Auto-generated method stub
-		 return packageRouteDao.findPkgRoute(ExpressSheetid);
+		List<PackageRoute> routeItems = packageRouteDao.findPkgRoute(ExpressSheetid);
+		List<LocXY> locItems = new ArrayList<LocXY>();
+		for(PackageRoute pr : routeItems){
+			locItems.add(new LocXY((double)pr.getX(), (double)pr.getY()));
+		}
+		return locItems;
 	}
 
 	@Override
