@@ -4,11 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
-import org.apache.cxf.aegis.type.java5.IgnoreProperty;
-
-import com.sun.xml.internal.ws.util.Pool.Unmarshaller;
 @Entity
 @org.hibernate.annotations.Proxy(lazy=false)
 @Table(name="TransPackageContent")

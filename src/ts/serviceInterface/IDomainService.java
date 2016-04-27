@@ -96,8 +96,8 @@ public interface IDomainService {
     
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/savePackageRoutePos/{packagetRouteId}/{x}/{y}")
-    public Response saveRoutePos(@PathParam("packagetRouteId")String packagetRouteId,@PathParam("x")double x,@PathParam("y")double y);
+    @Path("/savePackageRoutePos/{packagetId}/{x}/{y}")
+    public Response saveRoutePos(@PathParam("packagetId")String packageId,@PathParam("x")double x,@PathParam("y")double y);
     
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
@@ -116,7 +116,12 @@ public interface IDomainService {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/getString")
-    public String getString(String shihu);
+    public String getString(LocXY local);
     
+    @POST
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Path("/fun")
+    public Response fun(@FormParam("shihu") String shihu);
 }

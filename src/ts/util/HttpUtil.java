@@ -119,7 +119,7 @@ public class HttpUtil {
 		URL url = null;
 		try {
 
-			String paramurl = sendGetParams(httpUrl, params);
+			String paramurl = sendGetParams2(httpUrl, params);
 			url = new URL(paramurl);
 
 		} catch (MalformedURLException e) {
@@ -183,13 +183,25 @@ public class HttpUtil {
 				sbd.append("=");
 				sbd.append(urlEncode(temp[1]));
 				sbd.append("&");
-
 			}
 			sbd.setLength(sbd.length() - 1);// 删掉最后一个
 		}
 		return sbd.toString();
 	}
 
+	/**
+	 * 参数格式为时使用该方法“{}/{}/{}”
+	 * @param reqURL
+	 * @param params
+	 * @return
+	 */
+	private static String sendGetParams2(String reqURL, String... params) {
+		StringBuilder sbd = new StringBuilder(reqURL);
+		for(int i = 0; i < params.length; i++){
+			sbd.append("/" + params[i]);
+		}
+		return sbd.toString();
+	}
 	/**
 	 * Get追加参数
 	 * 
@@ -214,7 +226,6 @@ public class HttpUtil {
 				sbd.append("=");
 				sbd.append(urlEncode(temp[1]));
 				sbd.append("&");
-
 			}
 			sbd.setLength(sbd.length() - 1);// 删掉最后一个
 		}

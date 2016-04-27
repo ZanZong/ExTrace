@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 public class LocXY implements Serializable{
 
+	@Override
+	public String toString() {
+		return "LocXY [x=" + x + ", y=" + y + "]";
+	}
 	/**
 	 * @author Zongzan
 	 * 用于传输route的坐标信息，用于前端的绘图

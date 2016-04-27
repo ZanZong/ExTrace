@@ -334,13 +334,13 @@ public class DomainService implements IDomainService {
 			return Response.serverError().entity(e.getMessage()).build(); 
 		}
 	}
-//////////////need to write
+
 	@Override
-	public Response saveRoutePos(String packagetRouteId, double x, double y) {
+	public Response saveRoutePos(String packageId, double x, double y) {
 		// TODO Auto-generated method stub
 		PackageRoute pr = new PackageRoute();
 		try{
-			pr.setPkg(transPackageDao.get(packagetRouteId));
+			pr.setPkg(transPackageDao.get(packageId));
 			pr.setX((float)x);
 			pr.setY((float)y);
 			pr.setTm(new Date());
@@ -378,19 +378,16 @@ public class DomainService implements IDomainService {
 	}
 
 	@Override
-	public String getString(String shihu) {
+	public String getString(LocXY local) {
 		// TODO Auto-generated method stub
-	/*	try{
-			return Response.ok(shihu+"shabishabi").header("EntityClass", "String").build(); 
-		}
-		catch(Exception e)
-		{
-			return Response.serverError().entity(e.getMessage()).build(); 
-		}
-	}*/
-		System.out.println(shihu);
-		Gson g = new Gson();
-		g.fromJson(shihu, String.class);
-		return shihu+" hahaha";
+		System.out.println(local.toString());
+		return "haha";
+	}
+
+	@Override
+	public Response fun(String shihu) {
+		// TODO Auto-generated method stub
+		
+		return Response.ok(shihu + "shoudaole").build();
 	}
 }
