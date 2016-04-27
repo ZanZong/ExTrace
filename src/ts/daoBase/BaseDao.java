@@ -37,7 +37,6 @@ public class BaseDao<T,PK extends Serializable> extends HibernateDaoSupport impl
 
 	@Override
 	public T get(PK id) {
-//		System.out.println("BaseDao id:" + id);
 		return getHibernateTemplate().load(getEntityClass(), id);
 	}
 	
@@ -58,6 +57,7 @@ public class BaseDao<T,PK extends Serializable> extends HibernateDaoSupport impl
                     DetachedCriteria.forClass(getEntityClass()).addOrder(Order.desc(orderBy)));
 	}
 
+	//前两个参数设置排序，后面可以有多个参数，使用Restriction的方法描述对象
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<T> findBy(String orderBy, boolean isAsc, Criterion... criterions) {
@@ -72,7 +72,13 @@ public class BaseDao<T,PK extends Serializable> extends HibernateDaoSupport impl
 
         return (List<T>) getHibernateTemplate().findByCriteria(criteria);
 	}
-
+/*  getHibernateTemplate().findByCriteria(criteria)可以查询不需要分页的数据，
+	getHibernateTemplate().findByCriteria(criteria, firstResult, maxResults)可以用来查询需要的分页的属性，
+  HibernateTemplate ht=this.getHibernateTemplate();
+  DetachedCriteria criteria=DetachedCriteria.forClass(Paper.class);
+  ht.findByCriteria(criteria, firstResult, maxResults);
+ */
+	//选择propertyName的值等于value的项，后两个参数为设置排序
 	@Override
 	public List<T> findBy(String propertyName, Object value, String orderBy, boolean isAsc) {
         Assert.hasText(propertyName);
@@ -80,7 +86,7 @@ public class BaseDao<T,PK extends Serializable> extends HibernateDaoSupport impl
         return findBy(orderBy, isAsc, Restrictions.eq(propertyName, value));
         //return createCriteria(orderBy, isAsc, Restrictions.eq(propertyName, value)).list();
 	}
-	
+	//选择propertyName的值含有value的项，后两个参数为设置排序
 	@Override
 	public List<T> findLike(String propertyName, Object value, String orderBy, boolean isAsc) {
         Assert.hasText(propertyName);
@@ -91,37 +97,67 @@ public class BaseDao<T,PK extends Serializable> extends HibernateDaoSupport impl
 	
 	@Override
 	public void save(T entity) {
-		getHibernateTemplate().saveOrUpdate(entity);
+		/*getHibernateTemplate().saveOrUpdate(entity);*/
+		 try {
+			 getHibernateTemplate().save(entity);
+			  } catch (RuntimeException re) {
+			  re.printStackTrace();
+			  }
+		
 	}
 	
 	@Override
 	public void update(T entity) {
+		try {
 		getHibernateTemplate().update(entity);
+		 } catch (RuntimeException re) {
+			  re.printStackTrace();
+			  }
 	}
 	
 	@Override
 	public void remove(T entity) {
+		try{
 		getHibernateTemplate().delete(entity);
+	 	} catch (RuntimeException re) {
+		  re.printStackTrace();
+		  }
 	}
 	
 	@Override
 	public void removeById(PK id) {
+		try{
 		remove(get(id));
+		 } catch (RuntimeException re) {
+			  re.printStackTrace();
+			  }
 	}
 	
 	@Override
 	public void evit(T entity) {
-		getHibernateTemplate().evict(entity);
+		try{		
+			getHibernateTemplate().evict(entity);
+			} catch (RuntimeException re) {
+			  re.printStackTrace();
+		}
+		
 	}
 	
 	@Override
 	public void flush() {
+		try{
 		getHibernateTemplate().flush();
+		 } catch (RuntimeException re) {
+			  re.printStackTrace();
+			  }
 	}
 	
 	@Override
 	public void clear() {
+		try{
 		getHibernateTemplate().clear();
+		 } catch (RuntimeException re) {
+			  re.printStackTrace();
+			  }
 	}
-	
 }

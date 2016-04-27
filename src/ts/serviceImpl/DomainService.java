@@ -6,18 +6,26 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.logging.Log;
+
+import com.google.gson.Gson;
+
 import ts.daoImpl.ExpressSheetDao;
+import ts.daoImpl.PackageRouteDao;
 import ts.daoImpl.TransHistoryDao;
 import ts.daoImpl.TransPackageContentDao;
 import ts.daoImpl.TransPackageDao;
 import ts.daoImpl.UserInfoDao;
 import ts.model.ExpressSheet;
+import ts.model.PackageRoute;
 import ts.model.TransHistory;
 import ts.model.TransPackage;
 import ts.model.TransPackageContent;
 import ts.serviceInterface.IDomainService;
+import ts.smodel.LocXY;
 
 public class DomainService implements IDomainService {
 	
@@ -25,7 +33,16 @@ public class DomainService implements IDomainService {
 	private TransPackageDao transPackageDao;
 	private TransHistoryDao transHistoryDao;
 	private TransPackageContentDao transPackageContentDao;
+	private PackageRouteDao packageRouteDao;
 	
+	public PackageRouteDao getPackageRouteDao() {
+		return packageRouteDao;
+	}
+
+	public void setPackageRouteDao(PackageRouteDao packageRouteDao) {
+		this.packageRouteDao = packageRouteDao;
+	}
+
 	private UserInfoDao userInfoDao;
 	
 	public ExpressSheetDao getExpressSheetDao() {
@@ -316,5 +333,61 @@ public class DomainService implements IDomainService {
 		{
 			return Response.serverError().entity(e.getMessage()).build(); 
 		}
+	}
+
+	@Override
+	public Response saveRoutePos(String packageId, double x, double y) {
+		// TODO Auto-generated method stub
+		PackageRoute pr = new PackageRoute();
+		try{
+			pr.setPkg(transPackageDao.get(packageId));
+			pr.setX((float)x);
+			pr.setY((float)y);
+			pr.setTm(new Date());
+			packageRouteDao.save(pr);
+			return Response.ok().header("EntityClass", "R_TransPackage").build(); 
+		}
+		catch(Exception e)
+		{
+			return Response.serverError().entity(e.getMessage()).build(); 
+		}
+	}
+
+	@Override
+	public List<LocXY> getPackageRoutePos(String ExpressSheetid, String time) {
+		// TODO Auto-generated method stub
+		//List<PackageRoute> prList = packageRouteDao.findPkgRoute(ExpressSheetid);
+		return null;
+	}
+
+	@Override
+	public String getPostCode(String pro, String city, String town) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<LocXY> getPackageRoutePos(String ExpressSheetid) {
+		// TODO Auto-generated method stub
+		List<PackageRoute> routeItems = packageRouteDao.findPkgRoute(ExpressSheetid);
+		List<LocXY> locItems = new ArrayList<LocXY>();
+		for(PackageRoute pr : routeItems){
+			locItems.add(new LocXY((double)pr.getX(), (double)pr.getY()));
+		}
+		return locItems;
+	}
+
+	@Override
+	public String getString(LocXY local) {
+		// TODO Auto-generated method stub
+		System.out.println(local.toString());
+		return "haha";
+	}
+
+	@Override
+	public Response fun(String shihu) {
+		// TODO Auto-generated method stub
+		
+		return Response.ok(shihu + "shoudaole").build();
 	}
 }

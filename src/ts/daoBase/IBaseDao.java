@@ -10,11 +10,8 @@ import org.hibernate.criterion.Criterion;
 /**
  * 提供hibernate dao的所有操作,<br>
  * 实现类由spring注入HibernateEntityDao和HibernateGenericDao来实现
- * 泛化DAO基类
- * <T> DAO访问的entity类
- * <PK> DAO访问的entity的主键类
+ * 
  */
-
 public interface IBaseDao<T,PK extends Serializable> {
 	
     /**

@@ -46,8 +46,15 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	<tx:annotation-driven transaction-manager="transactionManager"
-		proxy-target-class="true" />
-
+		proxy-target-class="true" /><!-- 强制使用CGLIB -->
+	<bean id="transPackageContentDao" class="ts.daoImpl.TransPackageContentDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="packageRouteDao" class="ts.daoImpl.PackageRouteDao">
+	    <property name="sessionFactory" ref="sessionFactory"></property>
+	    <property name="transPackageContentDao" ref="transPackageContentDao"></property>
+	    <property name="transPackageDao" ref="transPackageDao"></property>
+	</bean>
 	<bean id="userInfoDao" class="ts.daoImpl.UserInfoDao">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
@@ -66,14 +73,15 @@
 		<property name="regionDao" ref="regionDao"></property>
 	</bean>
 	<bean id="transPackageDao" class="ts.daoImpl.TransPackageDao">
-		<property name="sessionFactory" ref="sessionFactory"></property>
-	</bean>
+	  	<property name="sessionFactory" ref="sessionFactory"></property>
+	    <property name="regionDao" ref="regionDao"></property>
+		<property name="transPackageContentDao" ref="transPackageContentDao"></property>
+		<property name="expressSheetDao" ref="expressSheetDao"></property>
+	 </bean>
 	<bean id="transHistoryDao" class="ts.daoImpl.TransHistoryDao">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
-	<bean id="transPackageContentDao" class="ts.daoImpl.TransPackageContentDao">
-		<property name="sessionFactory" ref="sessionFactory"></property>
-	</bean>
+	
 
 	<!-- REST服务的注解例子 -->
 	<jaxrs:server id="Service" address="/REST">
@@ -84,6 +92,7 @@
 				<property name="customerInfoDao" ref="customerInfoDao"></property>
 			</bean>
 			<bean class="ts.serviceImpl.DomainService">
+			    <property name="packageRouteDao" ref="packageRouteDao"></property>
 				<property name="expressSheetDao" ref="expressSheetDao"></property>	<!-- 配置DomainService中的属性dao -->
 				<property name="transPackageDao" ref="transPackageDao"></property>
 				<property name="transHistoryDao" ref="transHistoryDao"></property>

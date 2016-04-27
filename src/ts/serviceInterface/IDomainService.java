@@ -1,22 +1,33 @@
 package ts.serviceInterface;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.hibernate.annotations.Parameter;
+
 import ts.model.ExpressSheet;
+import ts.model.PackageRoute;
 import ts.model.TransPackage;
+import ts.smodel.LocXY;
 
 @Path("/Domain")	//业务操作
 public interface IDomainService {
     //快件操作访问接口=======================================================================
+	/**
+	 *JAX-RS 定义了 @POST、@GET、@PUT 和 @DELETE，分别对应 4 种 HTTP 方法
+	 *用于对资源进行创建、检索、更新和删除的操作。 
+	 */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("/getExpressList/{Property}/{Restrictions}/{Value}") 
@@ -83,4 +94,34 @@ public interface IDomainService {
     @Path("/saveTransPackage") 
 	public Response saveTransPackage(TransPackage obj);
     
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/savePackageRoutePos/{packagetId}/{x}/{y}")
+    public Response saveRoutePos(@PathParam("packagetId")String packageId,@PathParam("x")double x,@PathParam("y")double y);
+    
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/getPackageRoutePos/{ExpressSheetid}/{time}")
+    public List<LocXY> getPackageRoutePos(@PathParam("ExpressSheetid")String ExpressSheetid, @PathParam("time")String time);
+    
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/getPackageRoutePos/{ExpressSheetid}")
+    public List<LocXY> getPackageRoutePos(@PathParam("ExpressSheetid")String ExpressSheetid);
+    
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/getPostCode/{pro}/{city}/{town}")
+    public String getPostCode(@PathParam("pro")String pro, @PathParam("city")String city, @PathParam("town")String town);
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/getString")
+    public String getString(LocXY local);
+    
+    @POST
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Path("/fun")
+    public Response fun(@FormParam("shihu") String shihu);
 }

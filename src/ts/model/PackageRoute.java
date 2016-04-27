@@ -1,5 +1,5 @@
 /**
- * "Visual Paradigm: DO NOT MODIFY THIS FILE!"
+ *  * "Visual Paradigm: DO NOT MODIFY THIS FILE!"
  * 
  * This is an automatic generated file. It will be regenerated every time 
  * you generate persistence class.
@@ -31,7 +31,6 @@ public class PackageRoute implements Serializable {
 	public PackageRoute() {
 	}
 	
-	
 	@Column(name="SN", nullable=false)	
 	@Id	
 	@GeneratedValue(generator="MODEL_PACKAGEROUTE_SN_GENERATOR")	
@@ -43,13 +42,13 @@ public class PackageRoute implements Serializable {
 	@JoinColumns({ @JoinColumn(name="PackageID", referencedColumnName="ID", nullable=false) })	
 	private TransPackage pkg;
 	
-	@Column(name="x", nullable=false)	
+	@Column(name="x", nullable=false)
 	private float x;
 	
-	@Column(name="y", nullable=false)	
+	@Column(name="y", nullable=false)
 	private float y;
 	
-	@Column(name="tm", nullable=false)	
+	@Column(name="tm", nullable=true)
 	private Date tm;
 	
 	public void setSN(int value) {

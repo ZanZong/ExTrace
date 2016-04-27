@@ -30,7 +30,7 @@ public class TransPackageContent implements Serializable {
 	
 	@ManyToOne(targetEntity=TransPackage.class, fetch=FetchType.LAZY)	
 	@org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.LOCK})	
-	@JoinColumns({ @JoinColumn(name="PackageID", referencedColumnName="ID", nullable=false) })	
+	@JoinColumns({ @JoinColumn(name="PackageID", referencedColumnName="ID", nullable=false) })
 	private TransPackage pkg;
 
 	@Column(name="Status", nullable=false, length=10)	
@@ -56,14 +56,12 @@ public class TransPackageContent implements Serializable {
 		return express;
 	}
 	
-	public void setPkg(TransPackage value) {
-		this.pkg = value;
-	}
-	
 	public TransPackage getPkg() {
 		return pkg;
 	}
-	
+    public void setPkg(TransPackage value) {
+		this.pkg = value;
+	}
 	public void setStatus(int value) {
 		this.status = value;
 	}
@@ -102,4 +100,6 @@ public class TransPackageContent implements Serializable {
 		public static final int STATUS_ACTIVE = 0;
 		public static final int STATUS_OUTOF_PACKAGE = 1;
 	}
+	
+	 	
 }
