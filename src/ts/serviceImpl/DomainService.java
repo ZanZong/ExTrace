@@ -429,4 +429,21 @@ public class DomainService implements IDomainService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Response getTransHistroy(String expressSheetId) {
+		// TODO Auto-generated method stub
+		List<TransHistory> history = new ArrayList<TransHistory>();
+		try{
+			List<TransPackage> pkgs = transPackageDao.getAllPackage(expressSheetId);
+			for(TransPackage item : pkgs){
+				history.addAll(transHistoryDao.getPackageHistory(item.getID()));
+			}
+			return Response.ok(history).build(); 
+		}
+		catch(Exception e)
+		{
+			return Response.serverError().entity(e.getMessage()).build(); 
+		}
+	}
 }

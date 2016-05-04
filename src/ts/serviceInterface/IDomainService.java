@@ -134,9 +134,15 @@ public interface IDomainService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/unBoxingExpressSheet/{expressSheetId}")
+    //这个方法没用
     public Response unBoxingExpressSheet(@PathParam("expressSheetId")String expressSheetId);
     
-    
+    //历史信息
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/getTransHistory/{expreeSheetId}")
+    public Response getTransHistroy(@PathParam("expressSheetId") String expressSheetId);
     
     
     
