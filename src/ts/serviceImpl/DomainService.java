@@ -390,4 +390,43 @@ public class DomainService implements IDomainService {
 		
 		return Response.ok(shihu + "shoudaole").build();
 	}
+
+	@Override
+	public Response putExpressIntoPkg(String ExpressSheetid, String packageId) {
+		// TODO Auto-generated method stub
+		try{
+			TransPackageContent transPackageContent = new TransPackageContent();
+			transPackageContent.setPkg(transPackageDao.get(packageId));
+			transPackageContent.setStatus(0);
+			transPackageContent.setExpress(expressSheetDao.get(ExpressSheetid));
+			transPackageContentDao.save(transPackageContent);
+			
+			return Response.ok(transPackageContent).build(); 
+		}
+		catch(Exception e)
+		{
+			return Response.serverError().entity(e.getMessage()).build(); 
+		}
+		
+	}
+
+	@Override
+	public Response unBoxingPackage(String packageId) {
+		// TODO Auto-generated method stub
+		try{
+			TransPackage td = transPackageDao.get(packageId);
+			td.setStatus(td.getStatus() + 1);
+			return Response.ok().build(); 
+		}
+		catch(Exception e)
+		{
+			return Response.serverError().entity(e.getMessage()).build(); 
+		}
+	}
+
+	@Override
+	public Response unBoxingExpressSheet(String expressSheetId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

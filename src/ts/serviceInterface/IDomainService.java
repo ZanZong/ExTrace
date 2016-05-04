@@ -94,6 +94,7 @@ public interface IDomainService {
     @Path("/saveTransPackage") 
 	public Response saveTransPackage(TransPackage obj);
     
+  //画路径使用  
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/savePackageRoutePos/{packagetId}/{x}/{y}")
@@ -114,6 +115,35 @@ public interface IDomainService {
     @Path("/getPostCode/{pro}/{city}/{town}")
     public String getPostCode(@PathParam("pro")String pro, @PathParam("city")String city, @PathParam("town")String town);
 
+   //转运
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/putExpressIntoPkg/{ExpressSheetid}/{packageid}")
+    public Response putExpressIntoPkg(@PathParam("expressSheetId")String ExpressSheetid,
+    								  @PathParam("packageId")String packageId);
+    
+    //拆包
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/unBoxingPackage/{packageId}")
+    public Response unBoxingPackage(@PathParam("packageId")String packageId);
+    
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/unBoxingExpressSheet/{expressSheetId}")
+    public Response unBoxingExpressSheet(@PathParam("expressSheetId")String expressSheetId);
+    
+    
+    
+    
+    
+    
+    
+    
+    //test
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
