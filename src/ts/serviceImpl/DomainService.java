@@ -416,6 +416,7 @@ public class DomainService implements IDomainService {
 		try{
 			TransPackage td = transPackageDao.get(packageId);
 			td.setStatus(td.getStatus() + 1);
+			transPackageDao.update(td);
 			return Response.ok().build(); 
 		}
 		catch(Exception e)
