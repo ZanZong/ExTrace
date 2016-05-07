@@ -2,6 +2,8 @@ package ts.smodel;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+@XmlRootElement(name="LocXY")
 public class LocXY implements Serializable{
 
 	@Override
@@ -13,22 +15,25 @@ public class LocXY implements Serializable{
 	 * 用于传输route的坐标信息，用于前端的绘图
 	 */
 	private static final long serialVersionUID = 1L;
-	double x;
-	double y;
-	public LocXY(double x, double y){
+	float x;
+	float y;
+	public LocXY(){
+		
+	}
+	public LocXY(float x, float y){
 		this.x = x;
 		this.y = y;
 	}
-	public double getX() {
+	public float getX() {
 		return x;
 	}
-	public void setX(double x) {
+	public void setX(float x) {
 		this.x = x;
 	}
-	public double getY() {
+	public float getY() {
 		return y;
 	}
-	public void setY(double y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 }

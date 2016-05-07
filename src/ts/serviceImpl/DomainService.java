@@ -25,6 +25,7 @@ import ts.model.TransHistory;
 import ts.model.TransPackage;
 import ts.model.TransPackageContent;
 import ts.serviceInterface.IDomainService;
+import ts.smodel.History;
 import ts.smodel.LocXY;
 
 public class DomainService implements IDomainService {
@@ -135,7 +136,7 @@ public class DomainService implements IDomainService {
 
 	@Override
 	public List<ExpressSheet> getExpressListInPackage(String packageId){
-		List<ExpressSheet> list = new ArrayList<ExpressSheet>();
+		List<ExpressSheet> list = null;
 		list = expressSheetDao.getListInPackage(packageId);
 		return list;		
 	}
@@ -171,6 +172,7 @@ public class DomainService implements IDomainService {
 //			pkg_add.setPkg(transPackageDao.get(pkgId));
 //			pkg_add.setExpress(nes);
 //			nes.getTransPackageContent().add(pkg_add);
+			System.out.println(nes.toString());
 			expressSheetDao.save(nes);
 			//放到收件包裹中
 			MoveExpressIntoPackage(nes.getID(),pkgId);
@@ -354,26 +356,27 @@ public class DomainService implements IDomainService {
 	}
 
 	@Override
+	public String getPostCode(String pro, String city, String town) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	public List<LocXY> getPackageRoutePos(String ExpressSheetid, String time) {
 		// TODO Auto-generated method stub
 		//List<PackageRoute> prList = packageRouteDao.findPkgRoute(ExpressSheetid);
 		return null;
 	}
-
-	@Override
-	public String getPostCode(String pro, String city, String town) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	public List<LocXY> getPackageRoutePos(String ExpressSheetid) {
 		// TODO Auto-generated method stub
 		List<PackageRoute> routeItems = packageRouteDao.findPkgRoute(ExpressSheetid);
+		System.out.println("routesize is:"+routeItems.size());
 		List<LocXY> locItems = new ArrayList<LocXY>();
 		for(PackageRoute pr : routeItems){
-			locItems.add(new LocXY((double)pr.getX(), (double)pr.getY()));
+			locItems.add(new LocXY(pr.getX(), pr.getY()));
 		}
+		System.out.println(locItems.get(0).toString());
 		return locItems;
 	}
 
@@ -381,7 +384,7 @@ public class DomainService implements IDomainService {
 	public String getString(LocXY local) {
 		// TODO Auto-generated method stub
 		System.out.println(local.toString());
-		return "haha";
+		return	 "haha";
 	}
 
 	@Override
@@ -407,7 +410,6 @@ public class DomainService implements IDomainService {
 		{
 			return Response.serverError().entity(e.getMessage()).build(); 
 		}
-		
 	}
 
 	@Override
@@ -446,5 +448,56 @@ public class DomainService implements IDomainService {
 		{
 			return Response.serverError().entity(e.getMessage()).build(); 
 		}
+	}
+	
+	/**
+	 * 	揽收后，由于uidFrom的值是没有的，我们设‘0’为这时的uidFrom
+	 * 	派送时，没有uidTo,我们设‘1’为这时的uidTo
+	 */
+	@Override
+	public Response saveTransHistory(History history, int status) {
+		// TODO Auto-generated method stub
+		TransHistory th = new TransHistory();
+		th.setPkg(transPackageDao.get(history.getPackageID()));
+		th.setUIDFrom(history.getUidFrom());
+		th.setX(history.getX());
+		th.setY(history.getY());
+		if(status == TransPackage.STATUS.RECEIVE){
+			th.setUIDFrom(0);
+			th.setUIDTo(history.getUidTo());
+		}
+		else if(status == TransPackage.STATUS.DELIVERYPKG){
+			th.setUIDFrom(history.getUidFrom());
+			th.setUIDTo(0);
+		}
+		else{
+			th.setUIDFrom(history.getUidFrom());
+			th.setUIDTo(history.getUidTo());
+		}
+		try {
+			transHistoryDao.save(th);
+			return Response.ok("已更新历史").build();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return Response.serverError().entity(e.getMessage()).build();
+		}
+	}
+
+	@Override
+	public Response savePreFillList(ExpressSheet obj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Response FillList(ExpressSheet obj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ExpressSheet> getPreFillListInPackage(String packageId) {
+		// TODO Auto-generated method stub
+		return expressSheetDao.getPreFillListInPackage(packageId);
 	}
 }

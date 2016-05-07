@@ -19,6 +19,7 @@ import org.hibernate.annotations.Parameter;
 import ts.model.ExpressSheet;
 import ts.model.PackageRoute;
 import ts.model.TransPackage;
+import ts.smodel.History;
 import ts.smodel.LocXY;
 
 @Path("/Domain")	//业务操作
@@ -32,7 +33,7 @@ public interface IDomainService {
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("/getExpressList/{Property}/{Restrictions}/{Value}") 
 	public List<ExpressSheet> getExpressList(@PathParam("Property")String property, @PathParam("Restrictions")String restrictions, @PathParam("Value")String value);
-
+    
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("/getExpressListInPackage/PackageId/{PackageId}") 
@@ -55,22 +56,42 @@ public interface IDomainService {
     @Path("/saveExpressSheet") 
 	public Response saveExpressSheet(ExpressSheet obj);
     
+  //预填快递单
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/savePreFillList")
+    public Response savePreFillList(ExpressSheet obj);
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/FillList")
+    public Response FillList(ExpressSheet obj);
+    
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/getPreFillListInPackage/{packageId}")
+    public List<ExpressSheet> getPreFillListInPackage(@PathParam("package")String packageId);
+       
+    //=======================================================
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Path("/receiveExpressSheetId/id/{id}/uid/{uid}") 
+    @Path("/receiveExpressSheetId/id/{id}/uid/{uid}") //揽收快件  	以下三个功能需要存History
 	public Response ReceiveExpressSheetId(@PathParam("id")String id, @PathParam("uid")int uid);
     
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Path("/dispatchExpressSheetId/id/{id}/uid/{uid}") 
+    @Path("/dispatchExpressSheetId/id/{id}/uid/{uid}") //转运快件
 	public Response DispatchExpressSheet(@PathParam("id")String id, @PathParam("uid")int uid);
     
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Path("/deliveryExpressSheetId/id/{id}/uid/{uid}") 
+    @Path("/deliveryExpressSheetId/id/{id}/uid/{uid}") //派送快件
 	public Response DeliveryExpressSheetId(@PathParam("id")String id, @PathParam("uid")int uid);
 
     //包裹操作访问接口=======================================================================
@@ -107,6 +128,7 @@ public interface IDomainService {
     
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("/getPackageRoutePos/{ExpressSheetid}")
     public List<LocXY> getPackageRoutePos(@PathParam("ExpressSheetid")String ExpressSheetid);
     
@@ -142,13 +164,14 @@ public interface IDomainService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getTransHistory/{expreeSheetId}")
-    public Response getTransHistroy(@PathParam("expressSheetId") String expressSheetId);
+    public Response getTransHistroy(@PathParam("expressSheetId")String expressSheetId);
     
-    
-    
-    
-    
-    
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/saveTransHistory/{history}/{status}")
+    public Response saveTransHistory(@PathParam("history")History history, @PathParam("status")int status);
+
     //test
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

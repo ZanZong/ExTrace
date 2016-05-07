@@ -29,7 +29,7 @@ public class TransHistory implements Serializable {
 	public TransHistory() {
 	}
 	
-	@Column(name="SN", nullable=false)	
+	@Column(name="SN", nullable=true)	
 	@Id	
 	@GeneratedValue(generator="MODEL_TRANSHISTORY_SN_GENERATOR")	
 	@org.hibernate.annotations.GenericGenerator(name="MODEL_TRANSHISTORY_SN_GENERATOR", strategy="native")	
