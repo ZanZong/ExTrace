@@ -15,25 +15,25 @@ public class LocXY implements Serializable{
 	 * 用于传输route的坐标信息，用于前端的绘图
 	 */
 	private static final long serialVersionUID = 1L;
-	float x;
-	float y;
+	double x;
+	double y;
 	public LocXY(){
 		
 	}
-	public LocXY(float x, float y){
+	public LocXY(double x, double y){
 		this.x = x;
 		this.y = y;
 	}
-	public float getX() {
+	public double getX() {
 		return x;
 	}
-	public void setX(float x) {
+	public void setX(double x) {
 		this.x = x;
 	}
-	public float getY() {
+	public double getY() {
 		return y;
 	}
-	public void setY(float y) {
+	public void setY(double y) {
 		this.y = y;
 	}
 }

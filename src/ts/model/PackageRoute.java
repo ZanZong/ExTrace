@@ -43,10 +43,10 @@ public class PackageRoute implements Serializable {
 	private TransPackage pkg;
 	
 	@Column(name="x", nullable=false)
-	private float x;
+	private double x;
 	
 	@Column(name="y", nullable=false)
-	private float y;
+	private double y;
 	
 	@Column(name="tm", nullable=true)
 	private Date tm;
@@ -67,7 +67,7 @@ public class PackageRoute implements Serializable {
 		this.x = value;
 	}
 	
-	public float getX() {
+	public double getX() {
 		return x;
 	}
 	
@@ -75,7 +75,7 @@ public class PackageRoute implements Serializable {
 		this.y = value;
 	}
 	
-	public float getY() {
+	public double getY() {
 		return y;
 	}
 	

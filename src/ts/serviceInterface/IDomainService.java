@@ -105,10 +105,12 @@ public interface IDomainService {
     @Path("/getTransPackage/{id}") 
 	public Response getTransPackage(@PathParam("id")String id);
 
-    @POST
+    @GET
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/newTransPackage") 
-    public Response newTransPackage(String id, int uid);
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Path("/newTransPackage/id/{expreeSheetId}/uid/{uid}") 
+    public Response newTransPackage(@PathParam("expreeSheetId")String expreeSheetId,
+    			@PathParam("uid")int uid);
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

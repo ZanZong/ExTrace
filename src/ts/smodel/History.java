@@ -1,6 +1,12 @@
 package ts.smodel;
 
-public class History {
+import java.io.Serializable;
+
+public class History implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String packageID;
 	int uidFrom;
 	int uidTo;

@@ -1,5 +1,6 @@
 package ts.serviceImpl;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -306,7 +307,13 @@ public class DomainService implements IDomainService {
 	@Override
 	public Response getTransPackage(String id) {
 		TransPackage es = transPackageDao.get(id);
-		return Response.ok(es).header("EntityClass", "TransPackage").build(); 
+		ts.smodel.TransPackage stp = new ts.smodel.TransPackage();
+		stp.setCreateTime(es.getCreateTime());
+		stp.setID(es.getID());
+		stp.setSourceNode(es.getSourceNode());
+		stp.setTargetNode(es.getTargetNode());
+		stp.setStatus(es.getStatus());
+		return Response.ok(stp).header("EntityClass", "TransPackage").build(); 
 	}
 
 	@Override
@@ -314,7 +321,7 @@ public class DomainService implements IDomainService {
 		try{
 			TransPackage npk = new TransPackage();
 			npk.setID(id);
-			//npk.setStatus(value);
+			npk.setStatus(TransPackage.STATUS.RECEIVE);
 			npk.setCreateTime(new Date());
 			transPackageDao.save(npk);
 			return Response.ok(npk).header("EntityClass", "TransPackage").build(); 
@@ -362,10 +369,27 @@ public class DomainService implements IDomainService {
 	}
 	
 	@Override
-	public List<LocXY> getPackageRoutePos(String ExpressSheetid, String time) {
+	public List<LocXY> getPackageRoutePos(String ExpressSheetid, String time) {			//有问题
 		// TODO Auto-generated method stub
-		//List<PackageRoute> prList = packageRouteDao.findPkgRoute(ExpressSheetid);
-		return null;
+		List<PackageRoute> prList = packageRouteDao.findPkgRoute(ExpressSheetid);
+		List<LocXY> locItems = new ArrayList<LocXY>();
+		java.text.DateFormat df=new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		time = df.format(time);
+		java.util.Calendar c1=java.util.Calendar.getInstance();
+		java.util.Calendar c2=java.util.Calendar.getInstance();
+		try
+		{
+			c1.setTime(df.parse(time));
+			for(PackageRoute pr : prList){
+				c2.setTime(df.parse(pr.getTm().toString()));
+				if(c1.compareTo(c2) < 0){  
+					locItems.add(new LocXY(pr.getX(), pr.getY()));
+				}
+			}
+		}catch(java.text.ParseException e){
+			System.err.println("格式不正确");
+		}
+		return locItems;
 	}
 	@Override
 	public List<LocXY> getPackageRoutePos(String ExpressSheetid) {
@@ -374,7 +398,7 @@ public class DomainService implements IDomainService {
 		System.out.println("routesize is:"+routeItems.size());
 		List<LocXY> locItems = new ArrayList<LocXY>();
 		for(PackageRoute pr : routeItems){
-			locItems.add(new LocXY(pr.getX(), pr.getY()));
+			locItems.add(new LocXY((pr.getX()), pr.getY()));
 		}
 		System.out.println(locItems.get(0).toString());
 		return locItems;
