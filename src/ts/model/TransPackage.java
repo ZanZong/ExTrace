@@ -191,4 +191,14 @@ public class TransPackage implements Serializable {
 	public boolean isSaved() {
 		return _saved;
 	}
+	
+	public static final class STATUS{
+		public static final int RECEIVE= 0;//新建
+		public static final int BOXING = 1;//打包
+		public static final int TRASN = 2;//转运
+		
+		public static final int SOURTPPKG = 3;//分拣货篮
+		public static final int RECEIVEPKG = 4;//揽收货篮
+		public static final int DELIVERYPKG = 5;//派送货篮
+	}
 }

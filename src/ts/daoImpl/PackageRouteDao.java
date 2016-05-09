@@ -47,7 +47,7 @@ public class PackageRouteDao extends BaseDao<PackageRoute, Integer>{
 		System.out.println(items);
 		List<PackageRoute> pkgRoute = new ArrayList<PackageRoute>();
 		for(String pkgid : items){
-			pkgRoute.addAll(super.findBy("SN",false, Restrictions.sqlRestriction("PackageID = '"+ pkgid + "'")));
+			pkgRoute.addAll(findBy("SN",true,Restrictions.sqlRestriction("PackageID = '"+ pkgid + "'")));
 		}
 		return pkgRoute;
 	}

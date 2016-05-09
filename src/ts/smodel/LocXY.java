@@ -2,6 +2,8 @@ package ts.smodel;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+@XmlRootElement(name="LocXY")
 public class LocXY implements Serializable{
 
 	@Override
@@ -15,6 +17,9 @@ public class LocXY implements Serializable{
 	private static final long serialVersionUID = 1L;
 	double x;
 	double y;
+	public LocXY(){
+		
+	}
 	public LocXY(double x, double y){
 		this.x = x;
 		this.y = y;
