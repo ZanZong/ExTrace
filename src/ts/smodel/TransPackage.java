@@ -16,8 +16,10 @@ package ts.smodel;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.google.gson.annotations.Expose;
+import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.gson.annotations.Expose;
+@XmlRootElement(name="TransPackage")
 public class TransPackage  implements Serializable {
 	/**
 	 * 

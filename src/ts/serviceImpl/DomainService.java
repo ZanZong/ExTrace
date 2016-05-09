@@ -313,6 +313,7 @@ public class DomainService implements IDomainService {
 		stp.setSourceNode(es.getSourceNode());
 		stp.setTargetNode(es.getTargetNode());
 		stp.setStatus(es.getStatus());
+		System.out.println(stp.toString());
 		return Response.ok(stp).header("EntityClass", "TransPackage").build(); 
 	}
 
@@ -329,6 +330,24 @@ public class DomainService implements IDomainService {
 		catch(Exception e)
 		{
 			return Response.serverError().entity(e.getMessage()).build(); 
+		}
+	}
+	@Override
+	public Response unpackTransPackage(String packageId) {
+		// TODO Auto-generated method stub
+		try{
+			TransPackage tp=new TransPackage();
+			transPackageDao.unpackTransPackage(packageId);
+			tp=transPackageDao.get(packageId);
+			ts.smodel.TransPackage stp = new ts.smodel.TransPackage();
+			stp.setCreateTime(tp.getCreateTime());
+			stp.setID(tp.getID());
+			stp.setSourceNode(tp.getSourceNode());
+			stp.setTargetNode(tp.getTargetNode());
+			stp.setStatus(tp.getStatus());
+			return Response.ok(stp).header("EntityClass", "O_TransPackage").build(); 
+		}catch(Exception e){
+			return Response.serverError().entity(e.getMessage()).build();
 		}
 	}
 

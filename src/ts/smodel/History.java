@@ -2,6 +2,8 @@ package ts.smodel;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+@XmlRootElement(name="History")
 public class History implements Serializable{
 	/**
 	 * 

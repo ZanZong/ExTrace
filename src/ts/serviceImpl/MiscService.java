@@ -175,9 +175,14 @@ public class MiscService implements IMiscService{
 	}
 
 	@Override
-	public boolean doLogin(int uid, String pwd) {
+	public String doLogin(int uid, String pwd) {
 		// TODO Auto-generated method stub
-		return userInfoDao.checkUserByID(uid, pwd);
+		if(userInfoDao.checkUserByID(uid, pwd)){
+			System.out.println("hahhahahahaha");
+			return "Success";
+		}
+		else return "unSuccess";
+			
 	}
 
 	@Override

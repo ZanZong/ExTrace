@@ -74,7 +74,13 @@ public interface IDomainService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getPreFillListInPackage/{packageId}")
     public List<ExpressSheet> getPreFillListInPackage(@PathParam("package")String packageId);
-       
+   
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/unpackTransPackage/{packageId}")
+    public Response unpackTransPackage(@PathParam("packageId")String packageId);
+    
     //=======================================================
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
@@ -94,6 +100,11 @@ public interface IDomainService {
     @Path("/deliveryExpressSheetId/id/{id}/uid/{uid}") //派送快件
 	public Response DeliveryExpressSheetId(@PathParam("id")String id, @PathParam("uid")int uid);
 
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Path("/MoveExpressIntoPackage/id/{id}/uid/{uid}") //将快递移动到包裹中
+    public boolean MoveExpressIntoPackage(String id, String targetPkgId);
     //包裹操作访问接口=======================================================================
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })

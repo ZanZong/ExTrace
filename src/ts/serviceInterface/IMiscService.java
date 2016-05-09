@@ -85,9 +85,10 @@ public interface IMiscService {
 	public void CreateWorkSession(int uid);
     
     @GET
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("/doLogin/{uid}/{pwd}") 
-	public boolean doLogin(@PathParam("uid") int uid, @PathParam("pwd") String pwd);
+	public String doLogin(@PathParam("uid") int uid, @PathParam("pwd") String pwd);
     
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
