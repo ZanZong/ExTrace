@@ -5,22 +5,30 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.google.gson.Gson;
+
 import ts.daoImpl.CustomerInfoDao;
+import ts.daoImpl.ExpressSheetDao;
 import ts.daoImpl.PackageRouteDao;
+import ts.daoImpl.TransHistoryDao;
 import ts.daoImpl.TransPackageContentDao;
 import ts.daoImpl.TransPackageDao;
 import ts.daoImpl.UserInfoDao;
 import ts.model.CustomerInfo;
 import ts.model.ExpressSheet;
 import ts.model.PackageRoute;
+import ts.model.TransHistory;
 import ts.model.TransPackage;
 import ts.model.TransPackageContent;
 import ts.model.UserInfo;
+import ts.util.HttpUtil;
+import ts.util.JSONObjectUtils;
 
 /**|
  * 
@@ -40,30 +48,6 @@ import ts.model.UserInfo;
 @ContextConfiguration("classpath:applicationContext.xml")
 public class AddTest {
 
-//	@Resource
-//	private SessionFactory sessionFactory;
-//	public SessionFactory setSessionFactory(){
-//		return sessionFactory;
-//	}
-//	@Test 
-//	public void fun(){
-//		Configuration configuration = new Configuration() ;
-//		configuration.configure("ExTrace.cfg.xml");
-//		try{
-//			SessionFactory sessionFactory = configuration.buildSessionFactory();
-//			System.out.println(sessionFactory);
-//		}catch(Exception e){
-//			e.printStackTrace();
-//		}
-//	}
-	
-//	@Resource
-//	SessionFactory sessionFactory;
-//	
-//	@Test
-//	public void fun(){
-//		System.out.println(sessionFactory);
-//	}
 	@Resource
 	CustomerInfoDao customerInfoDao;
 	@Resource
@@ -71,47 +55,30 @@ public class AddTest {
 	@Resource
 	UserInfoDao userInfoDao;
 	@Resource
-	PackageRouteDao pkgRouteDao;
+	PackageRouteDao packageRouteDao;
 	@Resource
-	TransPackageContentDao transPkgConDao;
+	TransPackageContentDao transPackageContentDao;
+	@Resource
+	ExpressSheetDao expressSheetDao;
+	@Resource
+	TransHistoryDao transHistoryDao;
 	@Test
 	public void fun(){
-		/*PackageRoute pr = new PackageRoute();
-		TransPackage tp = new TransPackage();
-		TransPackageContent transPkgCont = new TransPackageContent();
-		ExpressSheet es = new ExpressSheet();
-		es.setID("10000001");
-		es.setPackageFee((float)20);
-		es.setSender(new CustomerInfo());
-		es.setRecever(new CustomerInfo());
-		es.setStatus(2);
+		System.out.println(userInfoDao.checkUserByID(12, "123456"));
+		/*PackageRoute packageRoute = new PackageRoute();
+		packageRoute.setPkg(transPackageDao.get("1111112222"));
+		packageRoute.setX((float)22.21);
+		packageRoute.setY((float)22.3);
+		packageRoute.setTm(new java.sql.Date(new java.util.Date().getTime()));
+		packageRouteDao.addPackageRoute(packageRoute);*/
+	
 		
-		tp.setSourceNode("1000");
-		tp.setStatus(2);
-		tp.setTargetNode("1001");
-
-		transPkgCont.setPkg(tp);
-		transPkgCont.setExpress(es);
-		Set<TransPackageContent> s = new HashSet<TransPackageContent>();
-		s.add(transPkgCont);
-		tp.setContent(s);
-		transPkgCont.setPkg(tp);
-		
-		pr.setPkg(tp);
-		pr.setX((float)21.3213);
-		pr.setY((float)42.2312);
-		packageRD.addPackageRoute(pr);*/
-		List<PackageRoute> pkgRouteList =  pkgRouteDao.findPkgRoute("1");
-		System.out.println(pkgRouteList.size());
-		/*System.out.println(transPackageDao.getDestination("1111112222"));*/
-	/*	CustomerInfo cus = customerInfoDao.get(1);
-		System.out.println(cus.getName());*/
-		
+		//	System.out.println(items.isEmpty());
 		/*CustomerInfo customer = new CustomerInfo();
 		customer.setAddress("郑州市高新区科学大道100号郑州大学新校区松园");
-		customer.setDepartment("#19-"
+		customer.setDepartment("#18-"
 				+ "");
-		customer.setName("zongzan");
+		customer.setName("aaaaa");
 		customer.setPostCode(450001);
 		customerInfoDao.save(customer);*/
 	}
