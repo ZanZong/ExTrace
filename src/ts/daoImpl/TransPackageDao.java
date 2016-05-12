@@ -126,7 +126,8 @@ public class TransPackageDao extends BaseDao<TransPackage,String> {
 		for(ExpressSheet es: list )
 		{
 			es.setStatus(2);
-			expressSheetDao.addExpressSheet(es);
+			//expressSheetDao.addExpressSheet(es);
+			expressSheetDao.update(es);//zongzan 5-12
 		}
 		/*for(ExpressSheet es: list )
 		{

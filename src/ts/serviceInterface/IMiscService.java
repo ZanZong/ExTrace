@@ -15,6 +15,7 @@ import ts.model.CodeNamePair;
 import ts.model.CustomerInfo;
 import ts.model.Region;
 import ts.model.TransNode;
+import ts.smodel.Message;
 
 @Path("/Misc")
 public interface IMiscService {
@@ -95,5 +96,10 @@ public interface IMiscService {
     @Path("/doLogOut/{uid}") 
 	public void doLogOut(@PathParam("uid") int uid);
     
-	public void RefreshSessionList();
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Path("/loadMessage/{uid}")
+    public List<Message> loadMessage(@PathParam("uid") int uid);
+	
+    public void RefreshSessionList();
 }
