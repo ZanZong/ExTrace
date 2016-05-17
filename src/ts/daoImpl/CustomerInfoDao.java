@@ -21,11 +21,11 @@ public class CustomerInfoDao extends BaseDao<CustomerInfo, Integer>{
 		super(CustomerInfo.class);
 	}
 	 
-	public CustomerInfo get(int id) {
+	/*public CustomerInfo get(int id) {
 		CustomerInfo ci = super.get(id);
-		ci.setRegionString(regionDao.getRegionNameByID(ci.getRegionCode()));	//获取区域的名字字符串
+		//ci.setRegionString(regionDao.getRegionNameByID(ci.getRegionCode()));	//获取区域的名字字符串
 		return ci;
-	}
+	}*/
 
 	public List<CustomerInfo> findByName(String name) {
 		return findLike("name", name+"%", "telCode", true);

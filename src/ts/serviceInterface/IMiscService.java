@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 
 import ts.model.CodeNamePair;
 import ts.model.CustomerInfo;
+import ts.model.Message;
 import ts.model.Region;
 import ts.model.TransNode;
 
@@ -94,6 +95,16 @@ public interface IMiscService {
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("/doLogOut/{uid}") 
 	public void doLogOut(@PathParam("uid") int uid);
+    
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Path("/loadMessage/{uid}")
+    public List<Message> loadMessage(@PathParam("uid") int uid);
+    
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Path("/getMessageByAccepter/{accId}")
+    public List<Message> getMsgByAccepter(@PathParam("accId")int accId);
     
 	public void RefreshSessionList();
 }

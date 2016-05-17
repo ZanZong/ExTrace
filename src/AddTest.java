@@ -1,8 +1,3 @@
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import javax.annotation.Resource;
 
 import org.json.JSONObject;
@@ -15,6 +10,7 @@ import com.google.gson.Gson;
 
 import ts.daoImpl.CustomerInfoDao;
 import ts.daoImpl.ExpressSheetDao;
+import ts.daoImpl.MessageDao;
 import ts.daoImpl.PackageRouteDao;
 import ts.daoImpl.TransHistoryDao;
 import ts.daoImpl.TransPackageContentDao;
@@ -22,6 +18,7 @@ import ts.daoImpl.TransPackageDao;
 import ts.daoImpl.UserInfoDao;
 import ts.model.CustomerInfo;
 import ts.model.ExpressSheet;
+import ts.model.Message;
 import ts.model.PackageRoute;
 import ts.model.TransHistory;
 import ts.model.TransPackage;
@@ -62,9 +59,18 @@ public class AddTest {
 	ExpressSheetDao expressSheetDao;
 	@Resource
 	TransHistoryDao transHistoryDao;
+	@Resource 
+	MessageDao messageDao;
 	@Test
 	public void fun(){
-		System.out.println(userInfoDao.checkUserByID(12, "123456"));
+		System.out.println(customerInfoDao.findByName("zongzan").size());
+		//System.out.println(messageDao.getMsgBySender(7).toString());
+		/*Message m = new Message();
+		m.setSender(7);
+		m.setTime(new java.sql.Date(new java.util.Date().getTime()));
+		m.setX(113.54143006591796);
+		m.setY(34.82447524804688);
+		messageDao.save(m);*/
 		/*PackageRoute packageRoute = new PackageRoute();
 		packageRoute.setPkg(transPackageDao.get("1111112222"));
 		packageRoute.setX((float)22.21);

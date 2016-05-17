@@ -3,17 +3,23 @@ package ts.serviceImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import ts.daoImpl.CustomerInfoDao;
+import ts.daoImpl.MessageDao;
 import ts.daoImpl.RegionDao;
 import ts.daoImpl.TransNodeDao;
 import ts.daoImpl.UserInfoDao;
 import ts.model.CodeNamePair;
 import ts.model.CustomerInfo;
+import ts.model.Message;
 import ts.model.Region;
 import ts.model.TransNode;
 import ts.serviceInterface.IMiscService;
+import ts.smodel.*;
 
 public class MiscService implements IMiscService{
 	//TransNodeCatalog nodes;	//自己做的缓存和重定向先不要了,用Hibernate缓存对付一下，以后加上去
@@ -22,6 +28,14 @@ public class MiscService implements IMiscService{
 	private RegionDao regionDao;
 	private CustomerInfoDao customerInfoDao;
 	private UserInfoDao userInfoDao;
+	private MessageDao messageDao;
+	public MessageDao getMessageDao() {
+		return messageDao;
+	}
+
+	public void setMessageDao(MessageDao messageDao) {
+		this.messageDao = messageDao;
+	}
 
 	public UserInfoDao getUserInfoDao() {
 		return userInfoDao;
@@ -195,5 +209,34 @@ public class MiscService implements IMiscService{
 	public void RefreshSessionList() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public List<Message> loadMessage(int uid) {
+		System.out.println("uid is :" + uid);
+		List<Message> msgs = new ArrayList<Message>();
+		Message msg1 = new Message();
+		Message msg2 = new Message();
+	/*	msg1.setExpId("100001");
+		msg1.setLoc("武当山旮旯村2号");
+		msg1.setSender("李敏");
+		msg1.setTel("18633225586");
+		msg1.setCid(3);
+		msg2.setExpId("100002");
+		msg2.setLoc("郑大北门师新庄");
+		msg2.setSender("冯戴军");
+		msg2.setTel("13855212139");
+		msg2.setCid(2);
+		msgs.add(msg1);
+		msgs.add(msg2);*/
+		return msgs;
+		/*return Response.ok().entity(msg1).header("EntityClass","").build();*/
+	}
+
+	@Override
+	public List<Message> getMsgByAccepter(int accId) {
+		getMsgByAccepter(accId);
+
+		return null;
 	}
 }

@@ -81,7 +81,11 @@
 	<bean id="transHistoryDao" class="ts.daoImpl.TransHistoryDao">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
-	
+	<bean id="messageDao" class="ts.daoImpl.MessageDao">
+	    <property name="sessionFactory" ref="sessionFactory"></property>
+	    <property name="customerInfoDao" ref="customerInfoDao"></property>
+	    <property name="userInfoDao" ref="userInfoDao"></property>
+	</bean>
 
 	<!-- REST服务的注解例子 -->
 	<jaxrs:server id="Service" address="/REST">
@@ -90,6 +94,7 @@
 				<property name="transNodeDao" ref="transNodeDao"></property>	<!-- 配置MiscService中的属性dao -->
 				<property name="regionDao" ref="regionDao"></property>
 				<property name="customerInfoDao" ref="customerInfoDao"></property>
+				<property name="messageDao" ref="messageDao"></property>
 			</bean>
 			<bean class="ts.serviceImpl.DomainService">
 			    <property name="packageRouteDao" ref="packageRouteDao"></property>

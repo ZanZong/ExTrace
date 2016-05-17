@@ -61,7 +61,7 @@ public class BaseDao<T,PK extends Serializable> extends HibernateDaoSupport impl
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<T> findBy(String orderBy, boolean isAsc, Criterion... criterions) {
-    	DetachedCriteria criteria = DetachedCriteria.forClass(getEntityClass());
+		DetachedCriteria criteria = DetachedCriteria.forClass(getEntityClass());
         for (Criterion c : criterions) {
             criteria.add(c);
         }
@@ -69,7 +69,6 @@ public class BaseDao<T,PK extends Serializable> extends HibernateDaoSupport impl
         	criteria.addOrder(Order.asc(orderBy));
         else
         	criteria.addOrder(Order.desc(orderBy));
-
         return (List<T>) getHibernateTemplate().findByCriteria(criteria);
 	}
 /*  getHibernateTemplate().findByCriteria(criteria)可以查询不需要分页的数据，
@@ -83,6 +82,7 @@ public class BaseDao<T,PK extends Serializable> extends HibernateDaoSupport impl
 	public List<T> findBy(String propertyName, Object value, String orderBy, boolean isAsc) {
         Assert.hasText(propertyName);
         Assert.hasText(orderBy);
+        System.out.println("baseDao:properName:"+propertyName);
         return findBy(orderBy, isAsc, Restrictions.eq(propertyName, value));
         //return createCriteria(orderBy, isAsc, Restrictions.eq(propertyName, value)).list();
 	}

@@ -307,7 +307,7 @@ public class DomainService implements IDomainService {
 	@Override
 	public Response getTransPackage(String id) {
 		TransPackage es = transPackageDao.get(id);
-		ts.smodel.TransPackage stp = new ts.smodel.TransPackage();
+		TransPackage stp =new TransPackage();
 		stp.setCreateTime(es.getCreateTime());
 		stp.setID(es.getID());
 		stp.setSourceNode(es.getSourceNode());
@@ -339,7 +339,7 @@ public class DomainService implements IDomainService {
 			TransPackage tp=new TransPackage();
 			transPackageDao.unpackTransPackage(packageId);
 			tp=transPackageDao.get(packageId);
-			ts.smodel.TransPackage stp = new ts.smodel.TransPackage();
+			TransPackage stp = new TransPackage();
 			stp.setCreateTime(tp.getCreateTime());
 			stp.setID(tp.getID());
 			stp.setSourceNode(tp.getSourceNode());
