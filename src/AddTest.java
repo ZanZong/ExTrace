@@ -63,8 +63,7 @@ public class AddTest {
 	MessageDao messageDao;
 	@Test
 	public void fun(){
-		System.out.println(customerInfoDao.findByName("zongzan").size());
-		//System.out.println(messageDao.getMsgBySender(7).toString());
+		System.out.println(messageDao.getMsgBySender(7).size());
 		/*Message m = new Message();
 		m.setSender(7);
 		m.setTime(new java.sql.Date(new java.util.Date().getTime()));

@@ -49,6 +49,7 @@ public class MessageDao extends BaseDao<Message, Integer> {
 	}
 	public void fillName(List<Message> msgs){
 		for(Message item : msgs){
+			System.out.println(item.toString());
 			item.setSenderName(customerInfoDao.get(item.getSender()).getName());
 			item.setAccepterName(userInfoDao.get(item.getAccepter()).getName());
 		}
