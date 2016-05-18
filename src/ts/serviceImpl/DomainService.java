@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import ts.daoImpl.ExpressSheetDao;
 import ts.daoImpl.PackageRouteDao;
 import ts.daoImpl.TransHistoryDao;
+import ts.daoImpl.TransNodeDao;
 import ts.daoImpl.TransPackageContentDao;
 import ts.daoImpl.TransPackageDao;
 import ts.daoImpl.UserInfoDao;
@@ -25,9 +26,11 @@ import ts.model.PackageRoute;
 import ts.model.TransHistory;
 import ts.model.TransPackage;
 import ts.model.TransPackageContent;
+import ts.model.UserInfo;
 import ts.serviceInterface.IDomainService;
 import ts.smodel.History;
 import ts.smodel.LocXY;
+import ts.smodel.NamePair;
 
 public class DomainService implements IDomainService {
 	
@@ -36,7 +39,16 @@ public class DomainService implements IDomainService {
 	private TransHistoryDao transHistoryDao;
 	private TransPackageContentDao transPackageContentDao;
 	private PackageRouteDao packageRouteDao;
+	private TransNodeDao transNodeDao;
 	
+	public TransNodeDao getTransNodeDao() {
+		return transNodeDao;
+	}
+
+	public void setTransNodeDao(TransNodeDao transNodeDao) {
+		this.transNodeDao = transNodeDao;
+	}
+
 	public PackageRouteDao getPackageRouteDao() {
 		return packageRouteDao;
 	}
@@ -455,27 +467,7 @@ public class DomainService implements IDomainService {
 		}
 	}
 
-	@Override
-	public Response unBoxingPackage(String packageId) {
-		// TODO Auto-generated method stub
-		try{
-			TransPackage td = transPackageDao.get(packageId);
-			td.setStatus(td.getStatus() + 1);
-			transPackageDao.update(td);
-			return Response.ok().build(); 
-		}
-		catch(Exception e)
-		{
-			return Response.serverError().entity(e.getMessage()).build(); 
-		}
-	}
-
-	@Override
-	public Response unBoxingExpressSheet(String expressSheetId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public Response getTransHistroy(String expressSheetId) {
 		// TODO Auto-generated method stub
@@ -542,5 +534,74 @@ public class DomainService implements IDomainService {
 	public List<ExpressSheet> getPreFillListInPackage(String packageId) {
 		// TODO Auto-generated method stub
 		return expressSheetDao.getPreFillListInPackage(packageId);
+	}
+	
+	@Override
+	public List<ExpressSheet> deliveExpress(List<String> list, String PackId) {
+		// TODO Auto-generated method stub
+       // System.out.println(list.get(0));
+        System.out.println(PackId);
+		UserInfo ui= new UserInfo();
+		ui=userInfoDao.getUserByDPid(PackId);
+		for(String expressId:list)
+		{
+			TransPackageContent tpc=new TransPackageContent();
+			ExpressSheet es=null;
+	    	es=expressSheetDao.get(expressId);	    	
+	    	es.setDeliver(ui.getName());
+	    	Date date=new Date();
+	    	es.setDeliveTime(date);
+	    	es.setStatus(4);
+	    	System.out.println(es);
+	    	tpc.setExpress(es);
+			tpc.setPkg(transPackageDao.get(PackId));
+			tpc.setStatus(5);
+			System.out.println(tpc);
+			transPackageContentDao.addTransPackageContent(tpc);
+		}
+		System.out.println(transPackageContentDao.getAllExpressSheet(PackId));
+		return transPackageContentDao.getAllExpressSheet(PackId);
+	}
+
+	@Override
+	public ExpressSheet signExpress(String expressId) {
+		// TODO Auto-generated method stub
+		ExpressSheet es=new ExpressSheet();
+		es=expressSheetDao.get(expressId);
+		Date date=new Date();
+		es.setAccepter("xingjiali");
+		es.setAccepteTime(date);
+		//System.out.println(es);
+		expressSheetDao.addExpressSheet(es);
+		return es;
+	}
+
+	@Override
+	public Response unpackaTransPackage(String packageId) {
+		// TODO Auto-generated method stub
+		try{
+			TransPackage tp=new TransPackage();
+			transPackageDao.unpackTransPackage(packageId);
+			tp=transPackageDao.get(packageId);
+			return Response.ok(tp).header("EntityClass", "TransPackage").build(); 
+		}catch(Exception e){
+			return Response.serverError().entity(e.getMessage()).build();
+		}
+	}
+
+	@Override
+	public List<ExpressSheet> getExpressListInPackage2(String packageId) {
+		// TODO Auto-generated method stub
+		List<ExpressSheet> list = new ArrayList<ExpressSheet>();
+		list = expressSheetDao.getListInPackage2(packageId);
+		return list;
+	}
+
+	@Override
+	public Response getTransNamePair(String a,String b) {
+		NamePair name = new NamePair();
+		name.setA(transNodeDao.getRegionString(a));
+		name.setB(transNodeDao.getRegionString(b));
+		return Response.ok("shihu").entity(name).header("EntityClass", "TranNode_name").build(); 
 	}
 }

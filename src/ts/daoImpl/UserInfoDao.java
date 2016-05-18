@@ -62,4 +62,12 @@ public class UserInfoDao extends BaseDao<UserInfo, Integer> {
 		System.out.println(ui.getTelCode());
 		return ui.getTelCode();
 	}
+	public UserInfo getUserByDPid(String dpId)
+	{
+		List<UserInfo> ui=new ArrayList<UserInfo>();
+		ui=super.findBy("UID", true, Restrictions.sqlRestriction("DelivePackageID = '"+ dpId + "'"));
+		System.out.println(ui.toString());
+		return ui.get(0);
+		
+	}
 }

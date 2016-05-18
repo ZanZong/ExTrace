@@ -16,5 +16,7 @@ public class TransNodeDao extends BaseDao<TransNode, String>{
         Assert.hasText(region_code);
         return findBy("regionCode", region_code, "nodeName", true);
 	}
-
+	public String getRegionString(String id){
+		return findBy("id",id,"id",true).get(0).getNodeName();
+	}
 }

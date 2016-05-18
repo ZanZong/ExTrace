@@ -158,19 +158,6 @@ public interface IDomainService {
     public Response putExpressIntoPkg(@PathParam("expressSheetId")String ExpressSheetid,
     								  @PathParam("packageId")String packageId);
     
-    //拆包
-    @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/unBoxingPackage/{packageId}")
-    public Response unBoxingPackage(@PathParam("packageId")String packageId);
-    
-    @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/unBoxingExpressSheet/{expressSheetId}")
-    //这个方法没用
-    public Response unBoxingExpressSheet(@PathParam("expressSheetId")String expressSheetId);
     
     //历史信息
     @GET
@@ -196,4 +183,37 @@ public interface IDomainService {
     @Consumes(MediaType.TEXT_PLAIN)
     @Path("/fun")
     public Response fun(@FormParam("shihu") String shihu);
+    
+  //@xingjiali
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Path("/getExpressListInPackage2/PackageId/{PackageId}") 
+	public List<ExpressSheet> getExpressListInPackage2(@PathParam("PackageId")String packageId);
+    
+ //@xingjiali
+    
+    //快件派送
+    @POST
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/deliveExpress")
+    public List<ExpressSheet> deliveExpress(@FormParam("list")List<String> list,@FormParam("PackId")String PackId);
+    
+    //签收
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("/signExpress/{expressId}")
+    public ExpressSheet  signExpress(@PathParam("expressId")String expressId);
+    
+    //拆包
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("/unpackaTransPackage/{packageId}")
+    public Response unpackaTransPackage(@PathParam("packageId")String packageId);
+    //得到tranPackagenode的发送地区名字和接收名字
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("/getTransNamePair/{paira}/{pairb}")
+    public Response getTransNamePair(@PathParam("paira") String a,@PathParam("pairb") String b);
 }
