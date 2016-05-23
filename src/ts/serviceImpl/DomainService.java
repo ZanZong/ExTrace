@@ -22,6 +22,7 @@ import ts.daoImpl.TransPackageContentDao;
 import ts.daoImpl.TransPackageDao;
 import ts.daoImpl.UserInfoDao;
 import ts.model.ExpressSheet;
+import ts.model.Message;
 import ts.model.PackageRoute;
 import ts.model.TransHistory;
 import ts.model.TransPackage;
@@ -40,7 +41,6 @@ public class DomainService implements IDomainService {
 	private TransPackageContentDao transPackageContentDao;
 	private PackageRouteDao packageRouteDao;
 	private TransNodeDao transNodeDao;
-	
 	public TransNodeDao getTransNodeDao() {
 		return transNodeDao;
 	}
@@ -443,10 +443,9 @@ public class DomainService implements IDomainService {
 	}
 
 	@Override
-	public Response fun(String shihu) {
+	public void fun(String shihu) {
 		// TODO Auto-generated method stub
-		
-		return Response.ok(shihu + "shoudaole").build();
+		System.out.println("this sting:"+shihu.length());
 	}
 
 	@Override
@@ -469,54 +468,31 @@ public class DomainService implements IDomainService {
 
 	
 	@Override
-	public Response getTransHistroy(String expressSheetId) {
+	public List<History> getTransHistroy(String expressSheetId) {
 		// TODO Auto-generated method stub
-		List<TransHistory> history = new ArrayList<TransHistory>();
-		try{
-			List<TransPackage> pkgs = transPackageDao.getAllPackage(expressSheetId);
+		System.out.println(expressSheetId);
+		List<History> history = new ArrayList<History>();
+		List<TransHistory> thList;
+		List<TransPackage> pkgs = transPackageDao.getAllPackage(expressSheetId);
 			for(TransPackage item : pkgs){
-				history.addAll(transHistoryDao.getPackageHistory(item.getID()));
-			}
-			return Response.ok(history).build(); 
+				thList = transHistoryDao.getPackageHistory(item.getID());
+				for(TransHistory th : thList){
+					History m = new History();
+					m.setPackageID(th.getPkg().getID());
+					m.setNameFrom(userInfoDao.get(th.getUIDFrom()).getName());
+					m.setNameTo(userInfoDao.get(th.getUIDTo()).getName());
+					m.setX(th.getX());
+					m.setY(th.getY());
+					m.setTime(th.getActTime());
+					history.add(m);
+				}
 		}
-		catch(Exception e)
-		{
-			return Response.serverError().entity(e.getMessage()).build(); 
-		}
+		System.out.println("history:" + history.size());;
+		return history;
 	}
 	
-	/**
-	 * 	揽收后，由于uidFrom的值是没有的，我们设‘0’为这时的uidFrom
-	 * 	派送时，没有uidTo,我们设‘1’为这时的uidTo
-	 */
-	@Override
-	public Response saveTransHistory(History history, int status) {
-		// TODO Auto-generated method stub
-		TransHistory th = new TransHistory();
-		th.setPkg(transPackageDao.get(history.getPackageID()));
-		th.setUIDFrom(history.getUidFrom());
-		th.setX(history.getX());
-		th.setY(history.getY());
-		if(status == TransPackage.STATUS.RECEIVE){
-			th.setUIDFrom(0);
-			th.setUIDTo(history.getUidTo());
-		}
-		else if(status == TransPackage.STATUS.DELIVERYPKG){
-			th.setUIDFrom(history.getUidFrom());
-			th.setUIDTo(0);
-		}
-		else{
-			th.setUIDFrom(history.getUidFrom());
-			th.setUIDTo(history.getUidTo());
-		}
-		try {
-			transHistoryDao.save(th);
-			return Response.ok("已更新历史").build();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			return Response.serverError().entity(e.getMessage()).build();
-		}
-	}
+	
+	
 
 	@Override
 	public Response savePreFillList(ExpressSheet obj) {

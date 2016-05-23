@@ -51,4 +51,21 @@ public class PackageRouteDao extends BaseDao<PackageRoute, Integer>{
 		}
 		return pkgRoute;
 	}
+	
+	public List<PackageRoute> getPkgRouteByPID(String PID){
+		System.out.println("getPkgRouteByPID");
+		return findBy("SN", true, Restrictions.sqlRestriction("PackageID = '"+ PID + "'"));
+	}
+	public PackageRoute getLastPkgRouteByPID(String PID){
+		List<PackageRoute> routList;
+		/*String sql = "{alias}.SN in(select MAX(pkgrot.SN) from packageroute pkgrot where PackageId ='" + PID + "'";
+		routList = findBy("SN", true, Restrictions.sqlRestriction(sql));*/
+		routList = this.getPkgRouteByPID(PID);
+		System.out.println("In getLastPkgRoutePID\nroutList:"+routList.toString());
+		if(routList.size() > 0)
+			return routList.get(routList.size() - 1);
+		else 
+			return null;
+	
+	}
 }

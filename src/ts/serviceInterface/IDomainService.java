@@ -18,6 +18,7 @@ import org.hibernate.annotations.Parameter;
 
 import ts.model.ExpressSheet;
 import ts.model.PackageRoute;
+import ts.model.TransHistory;
 import ts.model.TransPackage;
 import ts.smodel.History;
 import ts.smodel.LocXY;
@@ -157,21 +158,20 @@ public interface IDomainService {
     @Path("/putExpressIntoPkg/{ExpressSheetid}/{packageid}")
     public Response putExpressIntoPkg(@PathParam("expressSheetId")String ExpressSheetid,
     								  @PathParam("packageId")String packageId);
-    
-    
+   
     //历史信息
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("/getTransHistory/{expreeSheetId}")
-    public Response getTransHistroy(@PathParam("expressSheetId")String expressSheetId);
+    public List<History> getTransHistroy(@PathParam("expreeSheetId")String expressSheetId);
     
-    @GET
-    @Consumes(MediaType.APPLICATION_JSON)
+   /* @GET
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/saveTransHistory/{history}/{status}")
     public Response saveTransHistory(@PathParam("history")History history, @PathParam("status")int status);
-
+*/
     //test
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -180,14 +180,14 @@ public interface IDomainService {
     public String getString(LocXY local);
     
     @POST
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("/fun")
-    public Response fun(@FormParam("shihu") String shihu);
+    public void fun(String shihu);
     
   //@xingjiali
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Path("/getExpressListInPackage2/PackageId/{PackageId}") 
+    @Path("/getExpressListInPackage2/PackageId/{PackageId}")
 	public List<ExpressSheet> getExpressListInPackage2(@PathParam("PackageId")String packageId);
     
  //@xingjiali

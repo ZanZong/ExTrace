@@ -88,7 +88,7 @@ public interface IMiscService {
     @GET
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Path("/doLogin/{uid}/{pwd}") 
+    @Path("/doLogin/{uid}/pwd}") 
 	public String doLogin(@PathParam("uid") int uid, @PathParam("pwd") String pwd);
     
     @GET
@@ -96,15 +96,23 @@ public interface IMiscService {
     @Path("/doLogOut/{uid}") 
 	public void doLogOut(@PathParam("uid") int uid);
     
+    //客户用来查找自己发出的请求
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Path("/loadMessage/{uid}")
-    public List<Message> loadMessage(@PathParam("uid") int uid);
+    @Path("/loadMessageForCustomer/{cid}")
+    public List<Message> loadMessageForCustomer(@PathParam("uid") int uid);
     
+    //快递员load属于自己的请求
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Path("/getMessageByAccepter/{accId}")
-    public List<Message> getMsgByAccepter(@PathParam("accId")int accId);
+    @Path("/loadMessageForUser/{uid}")
+    public List<Message> loadMessageForUser(@PathParam("accId")int accId);
+    
+    //添加请求，适配快递员
+    @GET	
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Path("/recvMessage/{msg}")
+    public int recvMessage(@PathParam("msg")Message msg);
     
 	public void RefreshSessionList();
 }

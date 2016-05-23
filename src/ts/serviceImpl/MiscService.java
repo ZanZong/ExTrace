@@ -210,33 +210,24 @@ public class MiscService implements IMiscService{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public List<Message> loadMessageForCustomer(int uid) {
+		// TODO Auto-generated method stub
+		return messageDao.getMsgBySender(uid);
+	}
+
+	@Override
+	public List<Message> loadMessageForUser(int accId) {
+		// TODO Auto-generated method stub
+		System.out.println("MiscService:" + accId);
+		return messageDao.getMsgByAccepter(11);
+	}
+
+	@Override
+	public int recvMessage(Message msg) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
-	@Override
-	public List<Message> loadMessage(int uid) {
-		System.out.println("uid is :" + uid);
-		List<Message> msgs = new ArrayList<Message>();
-		Message msg1 = new Message();
-		Message msg2 = new Message();
-	/*	msg1.setExpId("100001");
-		msg1.setLoc("武当山旮旯村2号");
-		msg1.setSender("李敏");
-		msg1.setTel("18633225586");
-		msg1.setCid(3);
-		msg2.setExpId("100002");
-		msg2.setLoc("郑大北门师新庄");
-		msg2.setSender("冯戴军");
-		msg2.setTel("13855212139");
-		msg2.setCid(2);
-		msgs.add(msg1);
-		msgs.add(msg2);*/
-		return msgs;
-		/*return Response.ok().entity(msg1).header("EntityClass","").build();*/
-	}
-
-	@Override
-	public List<Message> getMsgByAccepter(int accId) {
-		getMsgByAccepter(accId);
-
-		return null;
-	}
 }

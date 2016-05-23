@@ -50,6 +50,9 @@
 	<bean id="transPackageContentDao" class="ts.daoImpl.TransPackageContentDao">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
+	<bean id="usersPackageDao" class="ts.daoImpl.UsersPackageDao">
+	    <property name="sessionFactory" ref="sessionFactory"></property>
+	</bean> 
 	<bean id="packageRouteDao" class="ts.daoImpl.PackageRouteDao">
 	    <property name="sessionFactory" ref="sessionFactory"></property>
 	    <property name="transPackageContentDao" ref="transPackageContentDao"></property>
@@ -80,12 +83,16 @@
 	 </bean>
 	<bean id="transHistoryDao" class="ts.daoImpl.TransHistoryDao">
 		<property name="sessionFactory" ref="sessionFactory"></property>
+		<property name="transPackageDao" ref="transPackageDao"></property>
 	</bean>
 	<bean id="messageDao" class="ts.daoImpl.MessageDao">
 	    <property name="sessionFactory" ref="sessionFactory"></property>
-	    <property name="customerInfoDao" ref="customerInfoDao"></property>
 	    <property name="userInfoDao" ref="userInfoDao"></property>
+	    <property name="customerInfoDao" ref="customerInfoDao"></property>
+	    <property name="packageRouteDao" ref="packageRouteDao"></property>
+	    <property name="usersPackageDao" ref="usersPackageDao"></property>
 	</bean>
+
 
 	<!-- REST服务的注解例子 -->
 	<jaxrs:server id="Service" address="/REST">

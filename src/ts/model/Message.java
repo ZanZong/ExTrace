@@ -123,7 +123,12 @@ public class Message implements Serializable{
 	public void setY(double y) {
 		this.y = y;
 	}
-
+	public int getSN() {
+		return SN;
+	}
+	public void setSN(int sN) {
+		SN = sN;
+	}
 
 	
 	/*
@@ -133,7 +138,14 @@ public class Message implements Serializable{
 	private String senderName;
 	@Transient	
 	private String accepterName;
-	
+	@Transient
+	private String tel;
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
 	public String getSenderName() {
 		return senderName;
 	}
@@ -146,14 +158,11 @@ public class Message implements Serializable{
 	public String setAccepterName(String accepterName) {
 		return this.accepterName = accepterName;
 	}
-
-
+	
 	@Override
 	public String toString() {
 		return "Message [SN=" + SN + ", sender=" + sender + ", accepter=" + accepter + ", expId=" + expId + ", isrecv="
-				+ isrecv + ", time=" + time + ", x=" + x + ", y=" + y + " + "+ "senderName="
-				+ senderName + ", accepterName=" + accepterName + "]";
+				+ isrecv + ", time=" + time + ", x=" + x + ", y=" + y + ", senderName=" + senderName + ", accepterName="
+				+ accepterName + ", tel=" + tel + "]";
 	}
-	
-
 }
