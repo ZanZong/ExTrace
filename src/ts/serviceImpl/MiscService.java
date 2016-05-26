@@ -1,12 +1,14 @@
 package ts.serviceImpl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+
+import com.google.gson.Gson;
 
 import ts.daoImpl.CustomerInfoDao;
 import ts.daoImpl.MessageDao;
@@ -18,8 +20,9 @@ import ts.model.CustomerInfo;
 import ts.model.Message;
 import ts.model.Region;
 import ts.model.TransNode;
+import ts.model.UserInfo;
 import ts.serviceInterface.IMiscService;
-import ts.smodel.*;
+import ts.util.JSONObjectUtils;
 
 public class MiscService implements IMiscService{
 	//TransNodeCatalog nodes;	//自己做的缓存和重定向先不要了,用Hibernate缓存对付一下，以后加上去
@@ -189,21 +192,20 @@ public class MiscService implements IMiscService{
 	}
 
 	@Override
-	public String doLogin(int uid, String pwd) {
+	public String checkLoginUser(int uid, String pwd) {
 		// TODO Auto-generated method stub
-		if(userInfoDao.checkUserByID(uid, pwd)){
-			System.out.println("hahhahahahaha");
-			return "Success";
+		System.out.println("hahhahahahaha");
+		System.out.println(uid+"&"+pwd);
+		boolean flag = userInfoDao.checkUserByID(uid, pwd);
+		System.out.println(flag);
+		if(flag){
+			System.out.println("eee");
+			return "success";
 		}
 		else return "unSuccess";
 			
 	}
 
-	@Override
-	public void doLogOut(int uid) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void RefreshSessionList() {
@@ -221,13 +223,79 @@ public class MiscService implements IMiscService{
 	public List<Message> loadMessageForUser(int accId) {
 		// TODO Auto-generated method stub
 		System.out.println("MiscService:" + accId);
-		return messageDao.getMsgByAccepter(11);
+		return messageDao.getMsgByAccepter(accId);
+	}
+
+	/**
+	 *客户端msg只需要填senderid, x, y,由recvMessage（）来填accepter,time,isrevc
+	 *取件后再次填写expid，isrev
+	 * @param msg
+	 * @return
+	 */
+	@Override
+	public int recvMessage(int senderId, double x, double y) {
+		// TODO Auto-generated method stub
+		Message msg = new Message();
+		msg.setSender(senderId);
+		msg.setX(x);
+		msg.setY(y);
+		msg.setTime(getCurrentDate());
+		msg.setIsrecv(false);
+		try {
+			messageDao.save(msg);
+			msg.setAccepter(messageDao.findSuitAccepter(msg.getSN()));
+			messageDao.update(msg);
+			return 1;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	public Date getCurrentDate() {
+		//产生一个不带毫秒的时间,不然,SQL时间和JAVA时间格式不一致
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		Date tm = new Date();
+		try {
+			tm= sdf.parse(sdf.format(new Date()));
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
+		return tm;
 	}
 
 	@Override
-	public int recvMessage(Message msg) {
+	public int isReceive(int SN) {
 		// TODO Auto-generated method stub
-		return 0;
+		try {
+			Message m = messageDao.get(SN);
+			m.setIsrecv(true);
+			messageDao.update(m);
+			return 1;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
+		}
 	}
+
+	@Override
+	public String register(String uname, String tel, String password) {
+		// TODO Auto-generated method stub
+		UserInfo ui = new UserInfo();
+		ui.setName(uname);
+		ui.setPWD(password);
+		ui.setTelCode(tel);
+		try {
+			userInfoDao.save(ui);
+			return "注册成功";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "注册失败";
+		}
+	}
+
 	
 }

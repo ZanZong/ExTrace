@@ -179,10 +179,10 @@ public interface IDomainService {
     @Path("/getString")
     public String getString(LocXY local);
     
-    @POST
+    @GET
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/fun")
-    public void fun(String shihu);
+    @Path("/fun/{name}")
+    public String fun(@PathParam("name")int shihu);
     
   //@xingjiali
     @GET

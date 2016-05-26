@@ -21,8 +21,8 @@ public class UserInfoDao extends BaseDao<UserInfo, Integer> {
 	}
 	public boolean checkUserByID(Integer uID, String psw){
 		UserInfo userInfo = get(uID);
-		/*System.out.println("name " + userInfo.getName()+"\npsw " + userInfo.getPWD()+"zong\n");
-		System.out.println(userInfo.getPWD().equals(psw));*/
+		System.out.println("name " + userInfo.getName()+"\npsw " + userInfo.getPWD()+"zong\n");
+		/*System.out.println(userInfo.getPWD().equals(psw));*/
 		return userInfo.getPWD().equals(psw);
 	}
 	public void addUser(UserInfo userInfo){

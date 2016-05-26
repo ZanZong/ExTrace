@@ -443,9 +443,10 @@ public class DomainService implements IDomainService {
 	}
 
 	@Override
-	public void fun(String shihu) {
+	public String fun(int shihu) {
 		// TODO Auto-generated method stub
-		System.out.println("this sting:"+shihu.length());
+		System.out.println("this sting:"+shihu);
+		return "haha";
 	}
 
 	@Override

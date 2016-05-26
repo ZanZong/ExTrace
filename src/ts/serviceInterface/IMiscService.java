@@ -2,6 +2,7 @@ package ts.serviceInterface;
 
 import java.util.List;
 
+import javax.print.attribute.standard.Media;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -81,38 +82,46 @@ public interface IMiscService {
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("/getRegion/{id}") 
 	public Region getRegion(@PathParam("id")String id);
-    
-    //===============================================================================================
-	public void CreateWorkSession(int uid);
+    //----用户登陆注册
+    @GET
+    @Consumes({ MediaType.TEXT_PLAIN})
+    @Produces({ MediaType.TEXT_PLAIN})
+    @Path("/checkLoginUser/{uid}/{pwd}")
+	public String checkLoginUser(@PathParam("uid")int uid, @PathParam("pwd") String pwd);
     
     @GET
-    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Path("/doLogin/{uid}/pwd}") 
-	public String doLogin(@PathParam("uid") int uid, @PathParam("pwd") String pwd);
+    @Consumes({ MediaType.TEXT_PLAIN})
+    @Produces({ MediaType.TEXT_PLAIN})
+    @Path("/register/{uname}/{tel}/{password}")
+    public String register(@PathParam("uname")String uname, @PathParam("tel")String tel,
+    						@PathParam("password")String password);
     
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Path("/doLogOut/{uid}") 
-	public void doLogOut(@PathParam("uid") int uid);
     
     //客户用来查找自己发出的请求
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("/loadMessageForCustomer/{cid}")
-    public List<Message> loadMessageForCustomer(@PathParam("uid") int uid);
+    public List<Message> loadMessageForCustomer(@PathParam("cid") int uid);
     
     //快递员load属于自己的请求
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("/loadMessageForUser/{uid}")
-    public List<Message> loadMessageForUser(@PathParam("accId")int accId);
+    public List<Message> loadMessageForUser(@PathParam("uid")int accId);
     
-    //添加请求，适配快递员
+    //添加请求，适配快递员-----待测试
     @GET	
+    @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Path("/recvMessage/{msg}")
-    public int recvMessage(@PathParam("msg")Message msg);
+    @Path("/recvMessage/{senderId}/{x}/{y}")
+    public int recvMessage(@PathParam("senderId")int senderId, 
+    		@PathParam("x")double x, @PathParam("y")double y);
+    
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Path("/isReceive/{SN}")
+    public int isReceive(@PathParam("SN")int SN);
     
 	public void RefreshSessionList();
+	public void CreateWorkSession(int uid);
 }

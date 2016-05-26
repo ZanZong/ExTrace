@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.json.JSONObject;
@@ -16,6 +19,7 @@ import ts.daoImpl.TransHistoryDao;
 import ts.daoImpl.TransPackageContentDao;
 import ts.daoImpl.TransPackageDao;
 import ts.daoImpl.UserInfoDao;
+import ts.daoImpl.UsersPackageDao;
 import ts.model.CustomerInfo;
 import ts.model.ExpressSheet;
 import ts.model.Message;
@@ -61,23 +65,12 @@ public class AddTest {
 	TransHistoryDao transHistoryDao;
 	@Resource 
 	MessageDao messageDao;
+	@Resource
+	UsersPackageDao usersPackageDao;
 	@Test
 	public void fun(){
-		System.out.println(messageDao.getMsgBySender(7).size());
-		/*Message m = new Message();
-		m.setSender(7);
-		m.setTime(new java.sql.Date(new java.util.Date().getTime()));
-		m.setX(113.54143006591796);
-		m.setY(34.82447524804688);
-		messageDao.save(m);*/
-		/*PackageRoute packageRoute = new PackageRoute();
-		packageRoute.setPkg(transPackageDao.get("1111112222"));
-		packageRoute.setX((float)22.21);
-		packageRoute.setY((float)22.3);
-		packageRoute.setTm(new java.sql.Date(new java.util.Date().getTime()));
-		packageRouteDao.addPackageRoute(packageRoute);*/
-	
-		
+		//System.out.println("accepter:" + messageDao.findSuitAccepter(9));
+		System.out.println(userInfoDao.checkUserByID(11,"123456"));
 		//	System.out.println(items.isEmpty());
 		/*CustomerInfo customer = new CustomerInfo();
 		customer.setAddress("郑州市高新区科学大道100号郑州大学新校区松园");
