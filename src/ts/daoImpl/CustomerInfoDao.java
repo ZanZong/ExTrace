@@ -32,4 +32,10 @@ public class CustomerInfoDao extends BaseDao<CustomerInfo, Integer>{
 	public List<CustomerInfo> findByTelCode(String telCode) {
 		return findBy("telCode", telCode, "telCode", true);
 	}
+	public CustomerInfo findByTel(String tel){
+		List<CustomerInfo> m =  findBy("telCode", tel, "telCode", true);
+		if(m.size() > 0)
+			return m.get(0);
+		else return null;
+	}
 }

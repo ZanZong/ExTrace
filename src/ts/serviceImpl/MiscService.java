@@ -214,9 +214,9 @@ public class MiscService implements IMiscService{
 	}
 
 	@Override
-	public List<Message> loadMessageForCustomer(int uid) {
+	public List<Message> loadMessageForCustomer(String tel) {
 		// TODO Auto-generated method stub
-		return messageDao.getMsgBySender(uid);
+		return messageDao.getMsgBySender(customerInfoDao.findByTel(tel).getID());
 	}
 
 	@Override
@@ -226,6 +226,17 @@ public class MiscService implements IMiscService{
 		return messageDao.getMsgByAccepter(accId);
 	}
 
+	@Override
+	public UserInfo getUser(int uid, String psw) {
+		if(userInfoDao.checkUserByID(uid, psw)){
+			return userInfoDao.get(uid);
+		}
+		else{
+			return null;
+		}
+	}
+	
+	
 	/**
 	 *客户端msg只需要填senderid, x, y,由recvMessage（）来填accepter,time,isrevc
 	 *取件后再次填写expid，isrev
@@ -233,10 +244,20 @@ public class MiscService implements IMiscService{
 	 * @return
 	 */
 	@Override
-	public int recvMessage(int senderId, double x, double y) {
+	public int recvMessage(String tel, double x, double y) {
 		// TODO Auto-generated method stub
+		CustomerInfo c = customerInfoDao.findByTel(tel);
 		Message msg = new Message();
-		msg.setSender(senderId);
+		if(c == null){
+			CustomerInfo nc = new CustomerInfo();
+			nc.setTelCode(tel);
+			nc.setName("新用户");
+			customerInfoDao.save(nc);
+			msg.setSender(nc.getID());
+		}
+		else{
+			msg.setSender(c.getID());
+		}
 		msg.setX(x);
 		msg.setY(y);
 		msg.setTime(getCurrentDate());
@@ -296,6 +317,27 @@ public class MiscService implements IMiscService{
 			return "注册失败";
 		}
 	}
+	@Override
+	public UserInfo getUserInfo(int uid) {
+		
+		// TODO Auto-generated method stub
+		UserInfo ui= null;
+		ui=userInfoDao.get(uid);		
+		return ui;
+	}
 
+	@Override
+	public String saveUserInfo(UserInfo ui) {
+		// TODO Auto-generated method stub
+		try {
+			userInfoDao.update(ui);
+			return "success";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "unsuccess";
+		}
+		
+	}
 	
 }

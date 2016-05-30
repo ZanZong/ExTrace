@@ -17,6 +17,7 @@ import ts.model.CustomerInfo;
 import ts.model.Message;
 import ts.model.Region;
 import ts.model.TransNode;
+import ts.model.UserInfo;
 
 @Path("/Misc")
 public interface IMiscService {
@@ -100,12 +101,12 @@ public interface IMiscService {
     //客户用来查找自己发出的请求
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Path("/loadMessageForCustomer/{cid}")
-    public List<Message> loadMessageForCustomer(@PathParam("cid") int uid);
+    @Path("/loadMessageForCustomer/{tel}")
+    public List<Message> loadMessageForCustomer(@PathParam("tel") String tel);
     
     //快递员load属于自己的请求
     @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces({MediaType.APPLICATION_JSON })
     @Path("/loadMessageForUser/{uid}")
     public List<Message> loadMessageForUser(@PathParam("uid")int accId);
     
@@ -113,8 +114,8 @@ public interface IMiscService {
     @GET	
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Path("/recvMessage/{senderId}/{x}/{y}")
-    public int recvMessage(@PathParam("senderId")int senderId, 
+    @Path("/recvMessage/{tel}/{x}/{y}")
+    public int recvMessage(@PathParam("tel")String tel,
     		@PathParam("x")double x, @PathParam("y")double y);
     
     @GET
@@ -122,6 +123,22 @@ public interface IMiscService {
     @Path("/isReceive/{SN}")
     public int isReceive(@PathParam("SN")int SN);
     
+	@GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Path("/getUser/{uid}/{psw}")
+    public UserInfo getUser(@PathParam("uid")int uid,@PathParam("psw") String psw);
+	
+	//xingjiali
+	@GET
+    @Produces({ MediaType.APPLICATION_JSON })
+    @Path("/getUserInfo/{uid}") 
+	public UserInfo getUserInfo(@PathParam("uid") int uid);
+	
+	@GET
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Path("saveUserInfo") 
+	public String saveUserInfo(UserInfo ui);
+	
 	public void RefreshSessionList();
 	public void CreateWorkSession(int uid);
 }

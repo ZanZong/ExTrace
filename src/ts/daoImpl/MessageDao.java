@@ -60,6 +60,7 @@ public class MessageDao extends BaseDao<Message, Integer> {
 	public List<Message> getMsgByAccepter(int accId) {
 		System.out.println("accId:" + accId);
 		List<Message> items = super.findBy("SN", true, Restrictions.sqlRestriction("accepter=" + accId));
+		if(items == null)	return null;
 		fillName(items);
 		if(items.isEmpty())
 			System.out.println("is empty");		
@@ -68,6 +69,7 @@ public class MessageDao extends BaseDao<Message, Integer> {
 	
 	public List<Message> getMsgBySender(int senderId){
 		List<Message> items = super.findBy("SN", true, Restrictions.sqlRestriction("sender=" + senderId)); 
+		if(items == null) return null;
 		fillName(items);
 		return items;
 	}

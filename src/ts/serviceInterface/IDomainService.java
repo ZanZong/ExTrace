@@ -216,4 +216,5 @@ public interface IDomainService {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/getTransNamePair/{paira}/{pairb}")
     public Response getTransNamePair(@PathParam("paira") String a,@PathParam("pairb") String b);
+
 }
