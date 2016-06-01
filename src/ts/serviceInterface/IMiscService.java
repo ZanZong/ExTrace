@@ -100,7 +100,8 @@ public interface IMiscService {
     
     //客户用来查找自己发出的请求
     @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Consumes({MediaType.TEXT_PLAIN})
+    @Produces({MediaType.APPLICATION_JSON })
     @Path("/loadMessageForCustomer/{tel}")
     public List<Message> loadMessageForCustomer(@PathParam("tel") String tel);
     

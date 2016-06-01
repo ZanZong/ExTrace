@@ -22,6 +22,7 @@ import ts.model.TransHistory;
 import ts.model.TransPackage;
 import ts.smodel.History;
 import ts.smodel.LocXY;
+import ts.smodel.WebHistory;
 
 @Path("/Domain")	//ÒµÎñ²Ù×÷
 public interface IDomainService {
@@ -166,6 +167,11 @@ public interface IDomainService {
     @Path("/getTransHistory/{expreeSheetId}")
     public List<History> getTransHistroy(@PathParam("expreeSheetId")String expressSheetId);
     
+    @GET
+    @Consumes({MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Path("/getWebHistory/{expressSheetId}")
+    public List<WebHistory> getWebHistory(@PathParam("expressSheetId") String expressSheetId);
    /* @GET
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Produces(MediaType.APPLICATION_JSON)

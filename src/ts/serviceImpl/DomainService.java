@@ -32,6 +32,7 @@ import ts.serviceInterface.IDomainService;
 import ts.smodel.History;
 import ts.smodel.LocXY;
 import ts.smodel.NamePair;
+import ts.smodel.WebHistory;
 
 public class DomainService implements IDomainService {
 	
@@ -580,6 +581,12 @@ public class DomainService implements IDomainService {
 		name.setA(transNodeDao.getRegionString(a));
 		name.setB(transNodeDao.getRegionString(b));
 		return Response.ok("shihu").entity(name).header("EntityClass", "TranNode_name").build(); 
+	}
+
+	@Override
+	public List<WebHistory> getWebHistory(String expressSheetId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

@@ -229,6 +229,7 @@ public class MiscService implements IMiscService{
 	@Override
 	public UserInfo getUser(int uid, String psw) {
 		if(userInfoDao.checkUserByID(uid, psw)){
+			System.out.println("right");
 			return userInfoDao.get(uid);
 		}
 		else{
@@ -322,7 +323,8 @@ public class MiscService implements IMiscService{
 		
 		// TODO Auto-generated method stub
 		UserInfo ui= null;
-		ui=userInfoDao.get(uid);		
+		ui=userInfoDao.get(uid);
+		System.out.println("getUserInfo:"+ui.toString());
 		return ui;
 	}
 
