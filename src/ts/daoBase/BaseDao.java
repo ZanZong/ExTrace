@@ -99,7 +99,7 @@ public class BaseDao<T,PK extends Serializable> extends HibernateDaoSupport impl
 	public void save(T entity) {
 		/*getHibernateTemplate().saveOrUpdate(entity);*/
 		 try {
-			 getHibernateTemplate().save(entity);
+			 getHibernateTemplate().saveOrUpdate(entity);
 			  } catch (RuntimeException re) {
 			  re.printStackTrace();
 			  }

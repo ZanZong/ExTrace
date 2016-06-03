@@ -19,4 +19,16 @@ public class TransNodeDao extends BaseDao<TransNode, String>{
 	public String getRegionString(String id){
 		return findBy("id",id,"id",true).get(0).getNodeName();
 	}
+	public TransNode getTransNodeByName(String source) {
+		// TODO Auto-generated method stub
+		//System.out.println(source);
+		//System.out.println(findBy("nodeName",source,"id",true).get(0));
+		return findBy("nodeName",source,"id",true).get(0);
+	}
+	public TransNode getTransNodeByNode(String node) {
+		// TODO Auto-generated method stub
+		//System.out.println(source);
+		//System.out.println(findBy("id",node,"id",true).get(0));
+		return findBy("id",node,"id",true).get(0);
+	}
 }

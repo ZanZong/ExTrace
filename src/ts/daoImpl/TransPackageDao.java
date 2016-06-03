@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.hibernate.criterion.Restrictions;
+
 import ts.daoBase.BaseDao;
 import ts.model.ExpressSheet;
 import ts.model.TransPackage;
@@ -133,5 +135,21 @@ public class TransPackageDao extends BaseDao<TransPackage,String> {
 			System.out.println(es.getStatus());
 		}*/
 		return true;
+	}
+	public List<TransPackage> getTransPackageBySource(String source) {
+		// TODO Auto-generated method stub	
+		//System.out.println(findBy("sourceNode",source,"ID",true));
+		return findBy("sourceNode",source,"ID",false);
+	}
+	public List<TransPackage> getTransPackageByDestination(String destination) {
+		// TODO Auto-generated method stub
+		return findBy("targetNode",destination,"targetNode",true);
+	}
+	public List<TransPackage> getTransPackageBySD(String source, String destination) {
+		// TODO Auto-generated method stub
+		List<TransPackage> list  = null;
+		list = super.findBy("ID", true, 
+				Restrictions.sqlRestriction("sourceNode = '"+ source + "' and targetNode = '" + destination +"'"));
+		return list;
 	}
 }

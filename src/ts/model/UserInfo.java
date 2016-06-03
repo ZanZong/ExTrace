@@ -63,10 +63,10 @@ public class UserInfo implements Serializable {
 	@Column(name="TransPackageID", nullable=true, length=24)	
 	private String transPackageID;
 	
-	@OneToMany(mappedBy="userU", targetEntity=UsersPackage.class)	
+	/*@OneToMany(mappedBy="userU", targetEntity=UsersPackage.class)	
 	@org.hibernate.annotations.Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.LOCK})	
 	@org.hibernate.annotations.LazyCollection(org.hibernate.annotations.LazyCollectionOption.TRUE)	
-	private java.util.Set<UsersPackage> usersPackage = new java.util.HashSet<UsersPackage>();
+	private java.util.Set<UsersPackage> usersPackage = new java.util.HashSet<UsersPackage>();*/
 	
 	public void setUID(int value) {
 		this.UID = value;
@@ -152,13 +152,13 @@ public class UserInfo implements Serializable {
 		return transPackageID;
 	}
 	
-	public void setUsersPackage(java.util.Set<UsersPackage> value) {
+/*	public void setUsersPackage(java.util.Set<UsersPackage> value) {
 		this.usersPackage = value;
 	}
 	
 	public java.util.Set<UsersPackage> getUsersPackage() {
 		return usersPackage;
-	}
+	}*/
 	
 	
 	public String toString() {
@@ -182,7 +182,7 @@ public class UserInfo implements Serializable {
 			sb.append("ReceivePackageID=").append(getReceivePackageID()).append(" ");
 			sb.append("DelivePackageID=").append(getDelivePackageID()).append(" ");
 			sb.append("TransPackageID=").append(getTransPackageID()).append(" ");
-			sb.append("UsersPackage.size=").append(getUsersPackage().size()).append(" ");
+			//sb.append("UsersPackage.size=").append(getUsersPackage().size()).append(" ");
 			sb.append("]");
 			return sb.toString();
 		}

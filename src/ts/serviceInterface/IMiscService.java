@@ -114,15 +114,14 @@ public interface IMiscService {
     //ÃÌº”«Î«Û£¨  ≈‰øÏµ›‘±-----¥˝≤‚ ‘
     @GET	
     @Consumes({ MediaType.APPLICATION_JSON })
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("/recvMessage/{tel}/{x}/{y}")
-    public int recvMessage(@PathParam("tel")String tel,
+    public String recvMessage(@PathParam("tel")String tel,
     		@PathParam("x")double x, @PathParam("y")double y);
     
     @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.APPLICATION_JSON })
     @Path("/isReceive/{SN}")
-    public int isReceive(@PathParam("SN")int SN);
+    public List<Message> isReceive(@PathParam("SN")int SN);
     
 	@GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -139,6 +138,17 @@ public interface IMiscService {
     @Consumes(MediaType.TEXT_PLAIN)
     @Path("saveUserInfo") 
 	public String saveUserInfo(UserInfo ui);
+	
+	@GET
+    @Produces( MediaType.APPLICATION_JSON )
+    @Path("/getNodesList/{RegionCode}") 
+	public List<TransNode> getNodesList(@PathParam("RegionCode")String regionCode);
+	
+	 @GET
+	 @Produces({MediaType.APPLICATION_JSON})
+	 @Path("/getUserList") 
+	 @Consumes("application/json")
+	 public List<UserInfo> getUserList();
 	
 	public void RefreshSessionList();
 	public void CreateWorkSession(int uid);

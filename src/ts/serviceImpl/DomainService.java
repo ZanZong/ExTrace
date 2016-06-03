@@ -1,5 +1,11 @@
 package ts.serviceImpl;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,13 +13,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.imageio.stream.MemoryCacheImageInputStream;
+import javax.imageio.stream.MemoryCacheImageOutputStream;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.logging.Log;
 
 import com.google.gson.Gson;
+import com.sun.xml.xsom.impl.scd.Iterators.Map;
 
+import BaiduMap.BaiduApiUtils;
 import ts.daoImpl.ExpressSheetDao;
 import ts.daoImpl.PackageRouteDao;
 import ts.daoImpl.TransHistoryDao;
@@ -21,18 +31,24 @@ import ts.daoImpl.TransNodeDao;
 import ts.daoImpl.TransPackageContentDao;
 import ts.daoImpl.TransPackageDao;
 import ts.daoImpl.UserInfoDao;
+import ts.daoImpl.UsersPackageDao;
 import ts.model.ExpressSheet;
 import ts.model.Message;
 import ts.model.PackageRoute;
 import ts.model.TransHistory;
+import ts.model.TransNode;
 import ts.model.TransPackage;
 import ts.model.TransPackageContent;
 import ts.model.UserInfo;
+import ts.model.UsersPackage;
 import ts.serviceInterface.IDomainService;
 import ts.smodel.History;
 import ts.smodel.LocXY;
 import ts.smodel.NamePair;
+import ts.smodel.PackageNamePair;
 import ts.smodel.WebHistory;
+import ts.util.ImgUtil;
+import ts.util.PostSplite;
 
 public class DomainService implements IDomainService {
 	
@@ -42,6 +58,21 @@ public class DomainService implements IDomainService {
 	private TransPackageContentDao transPackageContentDao;
 	private PackageRouteDao packageRouteDao;
 	private TransNodeDao transNodeDao;
+	private UsersPackageDao usersPackageDao;
+	/**
+	 * @return the usersPackageDao
+	 */
+	public UsersPackageDao getUsersPackageDao() {
+		return usersPackageDao;
+	}
+
+	/**
+	 * @param usersPackageDao the usersPackageDao to set
+	 */
+	public void setUsersPackageDao(UsersPackageDao usersPackageDao) {
+		this.usersPackageDao = usersPackageDao;
+	}
+
 	public TransNodeDao getTransNodeDao() {
 		return transNodeDao;
 	}
@@ -205,7 +236,8 @@ public class DomainService implements IDomainService {
 			if(obj.getStatus() != ExpressSheet.STATUS.STATUS_CREATED){
 				return Response.ok("快件运单已付运!无法保存更改!").header("EntityClass", "E_ExpressSheet").build(); 
 			}
-			expressSheetDao.save(obj);			
+			expressSheetDao.save(obj);
+			
 			return Response.ok(obj).header("EntityClass", "R_ExpressSheet").build(); 
 		}
 		catch(Exception e)
@@ -586,8 +618,324 @@ public class DomainService implements IDomainService {
 	@Override
 	public List<WebHistory> getWebHistory(String expressSheetId) {
 		// TODO Auto-generated method stub
-		return null;
+		List<WebHistory> whs = new ArrayList<WebHistory>();
+		List<TransHistory> thList;
+		List<TransPackage> pkgs = transPackageDao.getAllPackage(expressSheetId);
+			for(TransPackage item : pkgs){
+				thList = transHistoryDao.getPackageHistory(item.getID());
+				for(TransHistory th : thList){
+					WebHistory m = new WebHistory();
+					m.setPackageID(th.getPkg().getID());
+					m.setNameFrom(userInfoDao.get(th.getUIDFrom()).getName());
+					m.setNameTo(userInfoDao.get(th.getUIDTo()).getName());
+					m.setAddress(BaiduApiUtils.getFormatted_address(th.getY(), th.getX()));
+					/*m.setX(th.getX());
+					m.setY(th.getY());*/
+					m.setTime(th.getActTime());
+					whs.add(m);
+				}
+		}
+		return whs;
 	}
 
-	
+	@Override
+	public String savePic(String pic) {
+		// TODO Auto-generated method stub
+		String id = null;
+		String aa = null; 
+		String bb = null; 
+		byte[] src = null;
+		try {
+			aa = pic.substring(0,pic.indexOf('&'));
+			bb = pic.substring(pic.indexOf('&'),pic.length());
+			id = aa.substring(aa.indexOf('=')+1, aa.length());
+			src = ImgUtil.hex2byte(bb.substring(bb.indexOf('=')+1, bb.length()));
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		System.out.println(pic);
+		String url = "C:\\Extrace\\userdata\\";
+		File a = new File(url + id + ".jpg");
+		
+		try {
+			FileOutputStream out = new FileOutputStream(a);
+			out.write(src);
+			out.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "ok";
+	}
+
+	@Override
+	public List<ExpressSheet> getExpressInPackage(String packageId){
+		List<ExpressSheet> list = new ArrayList<ExpressSheet>();
+		list = expressSheetDao.getListInPackage(packageId);
+		return list;		
+	}
+
+	@Override
+	public List<TransPackage> getTransPackageBySource(String source) {
+		// TODO Auto-generated method stub
+		List<TransPackage> li= new ArrayList<TransPackage>();
+		TransNode tn=new TransNode();
+		tn=transNodeDao.getTransNodeByName(source);
+		li=transPackageDao.getTransPackageBySource(tn.getID());
+		return li;
+	}
+
+	@Override
+	public List<PackageNamePair> getTransPackageById(String id) {
+		// TODO Auto-generated method stub
+		List<PackageNamePair> lp=new ArrayList<PackageNamePair>();
+		PackageNamePair p=new PackageNamePair();
+		TransPackage tp =transPackageDao.get(id);
+		System.out.println(tp);
+		int uid=usersPackageDao.getUidByPackage(id);
+		String uname =userInfoDao.getUserByUid(uid).getName();
+		p.setPackageId(id);
+		p.setSourceNode(tp.getSourceNode());
+		p.setSourceName(transNodeDao.getTransNodeByNode(tp.getSourceNode()).getNodeName());
+        p.setTargetNode(tp.getTargetNode());
+        p.setTargetName(transNodeDao.getTransNodeByNode(tp.getTargetNode()).getNodeName());
+        p.setSourceRegionCode(transNodeDao.getTransNodeByNode(tp.getSourceNode()).getRegionCode());
+        p.setTargetRegionCode(transNodeDao.getTransNodeByNode(tp.getTargetNode()).getRegionCode());
+        p.setUserId(uid);
+        p.setUserName(uname);
+        p.setPkgType(tp.getStatus());
+        if(p.getPkgType()==3){
+        	p.setType("转运包裹");
+        }else if(p.getPkgType()==4){
+        	p.setType("揽收包裹");
+        }else {
+        	p.setType("派送包裹");
+        }
+        System.out.println(p.getPackageId());
+        System.out.println(p.getType());
+		//System.out.println(tp);
+        lp.add(p);
+		return lp;
+	}
+
+	@Override
+	public List<PackageNamePair> getTransPackagesBySource(String source) {
+		// TODO Auto-generated method stub
+		List<PackageNamePair> pl=new ArrayList<PackageNamePair>();
+		List<TransPackage> li=transPackageDao.getTransPackageBySource(source);
+		System.out.println(li);
+		for(TransPackage tp: li )
+		{
+			PackageNamePair p=new PackageNamePair();
+			int uid=usersPackageDao.getUidByPackage(tp.getID());
+			String uname =userInfoDao.getUserByUid(uid).getName();
+			p.setPackageId(tp.getID());
+			p.setSourceNode(tp.getSourceNode());
+			p.setSourceName(transNodeDao.getTransNodeByNode(tp.getSourceNode()).getNodeName());
+	        p.setTargetNode(tp.getTargetNode());
+	        p.setTargetName(transNodeDao.getTransNodeByNode(tp.getTargetNode()).getNodeName());
+	        p.setUserId(uid);
+	        p.setUserName(uname);
+	        p.setPkgType(tp.getStatus());
+	        if(p.getPkgType()==3){
+	        	p.setType("转运包裹");
+	        }else if(p.getPkgType()==4){
+	        	p.setType("揽收包裹");
+	        }else {
+	        	p.setType("派送包裹");
+	        }
+	        //System.out.println(p.getPackageId());
+	        System.out.println(p);
+			System.out.println(tp);
+	        pl.add(p);
+		}
+		return pl;
+	}
+
+	@Override
+	public List<PackageNamePair> getTransPackagesByDestination(String destination) {
+		// TODO Auto-generated method stub
+		System.out.println("getdest"+destination);
+		List<PackageNamePair> pl=new ArrayList<PackageNamePair>();
+		List<TransPackage> li=transPackageDao.getTransPackageByDestination(destination);
+		System.out.println("0000");
+		System.out.println(li);
+		for(TransPackage tp: li )
+		{
+			PackageNamePair p=new PackageNamePair();
+			int uid=usersPackageDao.getUidByPackage(tp.getID());
+			String uname =userInfoDao.getUserByUid(uid).getName();
+			p.setPackageId(tp.getID());
+			p.setSourceNode(tp.getSourceNode());
+			p.setSourceName(transNodeDao.getTransNodeByNode(tp.getSourceNode()).getNodeName());
+	        p.setTargetNode(tp.getTargetNode());
+	        p.setTargetName(transNodeDao.getTransNodeByNode(tp.getTargetNode()).getNodeName());
+	        p.setUserId(uid);
+	        p.setUserName(uname);
+	        p.setPkgType(tp.getStatus());
+	        if(p.getPkgType()==3){
+	        	p.setType("转运包裹");
+	        }else if(p.getPkgType()==4){
+	        	p.setType("揽收包裹");
+	        }else {
+	        	p.setType("派送包裹");
+	        }
+	        //System.out.println(p.getPackageId());
+	        System.out.println(p);
+			System.out.println(tp);
+	        pl.add(p);
+		}
+		return pl;
+	}
+
+	@Override
+	public String saveTransPackages(String obj) {
+		// TODO Auto-generated method stub
+		
+		try {
+			System.out.println("12313");
+			System.out.println(obj);
+			System.out.println("12312");
+			java.util.Map<String, String> uri= PostSplite.postchange(obj);
+			System.out.println("nicneincei");
+			//分配包裹
+			int uid=Integer.parseInt(uri.get("name"));
+			UserInfo ui=userInfoDao.getUserByUid(uid);
+			ui.setReceivePackageID(uri.get("pkgid1"));
+			ui.setTransPackageID(uri.get("pkgid2"));
+			ui.setDelivePackageID(uri.get("pkgid3"));
+			ui.setURull(1);
+			userInfoDao.update(ui);
+			
+			//添加包裹
+			TransPackage tp1=new TransPackage();
+			tp1.setID(uri.get("pkgid1"));
+			tp1.setSourceNode(uri.get("s_node1"));
+			tp1.setTargetNode(uri.get("d_node1"));
+			tp1.setCreateTime(new SimpleDateFormat("yyyy-MM-dd+HH:mm:ss").parse(uri.get("time1")));
+			String s1=uri.get("pkgtype1");
+			if(s1.equals("揽收包裹") ){
+				tp1.setStatus(3);
+			}else if(s1.equals("转运包裹")){
+				tp1.setStatus(4);
+			}else {
+				tp1.setStatus(5);
+			}
+			System.out.println(uri.get("time1"));
+			System.out.println(uri.get("pkgtype1"));
+			System.out.println(tp1);
+			transPackageDao.save(tp1);
+			
+			//添加userpackage
+			UsersPackage up1=new UsersPackage();
+			up1.setPkg(tp1);
+			up1.setUserU(ui);
+			usersPackageDao.addUsersPackage(up1);
+			
+			//添加包裹
+			TransPackage tp2=new TransPackage();
+			tp2.setID(uri.get("pkgid2"));
+			tp2.setSourceNode(uri.get("s_node2"));
+			tp2.setTargetNode(uri.get("d_node2"));
+			tp2.setCreateTime(new SimpleDateFormat("yyyy-MM-dd+HH:mm:ss").parse(uri.get("time2")));
+			String s2=uri.get("pkgtype2");
+			if(s2.equals("揽收包裹")){
+				tp2.setStatus(3);
+			}else if(s2.equals("转运包裹")){
+				tp2.setStatus(4);
+			}else {
+				tp2.setStatus(5);
+			}
+			System.out.println(uri.get("time2"));
+			System.out.println(uri.get("pkgtype2"));
+			System.out.println(tp2);
+			transPackageDao.save(tp2);
+			
+			//添加userpackage
+			UsersPackage up2=new UsersPackage();
+			up2.setPkg(tp2);
+			up2.setUserU(ui);
+			usersPackageDao.addUsersPackage(up2);
+			
+			//添加包裹
+			TransPackage tp3=new TransPackage();
+			tp3.setID(uri.get("pkgid3"));
+			tp3.setSourceNode(uri.get("s_node3"));
+			tp3.setTargetNode(uri.get("d_node3"));
+			tp3.setCreateTime(new SimpleDateFormat("yyyy-MM-dd+HH:mm:ss").parse(uri.get("time3")));
+			String s3=uri.get("pkgtype3");
+			if(s3.equals("揽收包裹")){
+				tp3.setStatus(3);
+			}else if(s3.equals("转运包裹")){
+				tp3.setStatus(4);
+			}else {
+				tp3.setStatus(5);
+			}
+			System.out.println(uri.get("time3"));
+			System.out.println(uri.get("pkgtype3"));
+			System.out.println(tp3);
+			transPackageDao.save(tp3);
+			
+			//添加userpackage
+			UsersPackage up3=new UsersPackage();
+			up3.setPkg(tp3);
+			up3.setUserU(ui);
+			usersPackageDao.addUsersPackage(up3);
+			
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "成功添加包裹并分配！"; 
+		
+	}
+
+	@Override
+	public String updateTransPackages(String obj) {
+		// TODO Auto-generated method stub
+		java.util.Map<String, String> uri= PostSplite.postchange(obj);
+		String id=uri.get("pkgid");
+		TransPackage tp=transPackageDao.get(id);
+		tp.setSourceNode(uri.get("s_node"));
+		tp.setTargetNode(uri.get("d_node"));
+		transPackageDao.update(tp);
+		return "修改成功！";
+	}
+
+	@Override
+	public List<PackageNamePair> getTransPackagesBySD(String source, String destination) {
+		// TODO Auto-generated method stub
+		List<PackageNamePair> pl=new ArrayList<PackageNamePair>();
+		List<TransPackage> li=transPackageDao.getTransPackageBySD(source,destination);
+		System.out.println("0000");
+		System.out.println(li);
+		for(TransPackage tp: li )
+		{
+			PackageNamePair p=new PackageNamePair();
+			int uid=usersPackageDao.getUidByPackage(tp.getID());
+			String uname =userInfoDao.getUserByUid(uid).getName();
+			p.setPackageId(tp.getID());
+			p.setSourceNode(tp.getSourceNode());
+			p.setSourceName(transNodeDao.getTransNodeByNode(tp.getSourceNode()).getNodeName());
+	        p.setTargetNode(tp.getTargetNode());
+	        p.setTargetName(transNodeDao.getTransNodeByNode(tp.getTargetNode()).getNodeName());
+	        p.setUserId(uid);
+	        p.setUserName(uname);
+	        p.setPkgType(tp.getStatus());
+	        if(p.getPkgType()==3){
+	        	p.setType("转运包裹");
+	        }else if(p.getPkgType()==4){
+	        	p.setType("揽收包裹");
+	        }else {
+	        	p.setType("派送包裹");
+	        }
+	        //System.out.println(p.getPackageId());
+	        System.out.println(p);
+			System.out.println(tp);
+	        pl.add(p);
+		}
+		return pl;
+	}
 }

@@ -22,6 +22,7 @@ import ts.model.TransHistory;
 import ts.model.TransPackage;
 import ts.smodel.History;
 import ts.smodel.LocXY;
+import ts.smodel.PackageNamePair;
 import ts.smodel.WebHistory;
 
 @Path("/Domain")	//业务操作
@@ -105,8 +106,8 @@ public interface IDomainService {
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Path("/MoveExpressIntoPackage/id/{id}/uid/{uid}") //将快递移动到包裹中
-    public boolean MoveExpressIntoPackage(String id, String targetPkgId);
+    @Path("/MoveExpressIntoPackage/id/{id}/targetPkgId/{targetPkgId}") //将快递移动到包裹中
+    public boolean MoveExpressIntoPackage(@PathParam("id")String id, @PathParam("targetPkgId")String targetPkgId);
     //包裹操作访问接口=======================================================================
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -160,7 +161,7 @@ public interface IDomainService {
     public Response putExpressIntoPkg(@PathParam("expressSheetId")String ExpressSheetid,
     								  @PathParam("packageId")String packageId);
    
-    //历史信息
+    //历史信息zong
     @GET
     @Consumes({MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -169,7 +170,7 @@ public interface IDomainService {
     
     @GET
     @Consumes({MediaType.APPLICATION_JSON })
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces({MediaType.APPLICATION_JSON })
     @Path("/getWebHistory/{expressSheetId}")
     public List<WebHistory> getWebHistory(@PathParam("expressSheetId") String expressSheetId);
    /* @GET
@@ -192,8 +193,14 @@ public interface IDomainService {
     
   //@xingjiali
     @GET
+    @Produces( MediaType.APPLICATION_JSON )
+    @Path("/getExpressInPackage/{PackageId}") 
+	public List<ExpressSheet> getExpressInPackage(@PathParam("PackageId")String packageId);
+
+    //@xingjiali
+    @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Path("/getExpressListInPackage2/PackageId/{PackageId}")
+    @Path("/getExpressListInPackage2/{PackageId}") 
 	public List<ExpressSheet> getExpressListInPackage2(@PathParam("PackageId")String packageId);
     
  //@xingjiali
@@ -217,10 +224,59 @@ public interface IDomainService {
     @Path("/unpackaTransPackage/{packageId}")
     public Response unpackaTransPackage(@PathParam("packageId")String packageId);
     //得到tranPackagenode的发送地区名字和接收名字
+    
+    //xingjiali
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/getTransNamePair/{paira}/{pairb}")
     public Response getTransNamePair(@PathParam("paira") String a,@PathParam("pairb") String b);
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON )
+    @Path("/getTransPackageById/{id}") 
+	public List<PackageNamePair> getTransPackageById(@PathParam("id")String id);
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON )
+    @Path("/getTransPackagesBySource/{source}") 
+	public List<PackageNamePair> getTransPackagesBySource(@PathParam("source")String source);
+
+    //根据原地点，查找包裹
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("/getTransNamePair/{paira}/{pairb}")
+    public List<TransPackage> getTransPackageBySource(@PathParam("source") String source);
+   
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON )
+    @Path("/getTransPackagesByDestination/{destination}") 
+	public List<PackageNamePair> getTransPackagesByDestination(@PathParam("destination")String destination);
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON )
+    @Path("/getTransPackagesBySD/{source}/{destination}") 
+	public List<PackageNamePair> getTransPackagesBySD(@PathParam("source")String source,@PathParam("destination")String destination);
+    
+    @POST
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON})
+    @Path("/saveTransPackages") 
+	public String saveTransPackages(String obj);
+    
+    @POST
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON})
+    @Path("/updateTransPackages") 
+	public String updateTransPackages(String obj);
+    
+    //上传图片
+    @POST
+    @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON})
+    @Path("/savePic") 
+	public String savePic(String pic);
+
+	
+    
 
 }

@@ -13,6 +13,10 @@ public class UsersPackageDao extends BaseDao<UsersPackage, Integer> {
 	}
 	public int getUidByPackage(String PID){
 		List<UsersPackage> ups = findBy("SN", true, Restrictions.sqlRestriction("PackageID='"+ PID +"'"));
-		return ups.size() > 0 ? ups.get(0).getUserU().getUID() : null; 
+		System.out.println("getUIDByPackage:");
+		return ups.size() > 0 ? ups.get(0).getUserU().getUID() : 0; 
+	}
+	public void addUsersPackage(UsersPackage up){
+		save(up);
 	}
 }

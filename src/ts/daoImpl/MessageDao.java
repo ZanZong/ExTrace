@@ -59,7 +59,7 @@ public class MessageDao extends BaseDao<Message, Integer> {
 	
 	public List<Message> getMsgByAccepter(int accId) {
 		System.out.println("accId:" + accId);
-		List<Message> items = super.findBy("SN", true, Restrictions.sqlRestriction("accepter=" + accId));
+		List<Message> items = super.findBy("SN", true, Restrictions.sqlRestriction("accepter=" + accId + " and isrecv=0"));
 		if(items == null)	return null;
 		fillName(items);
 		if(items.isEmpty())

@@ -245,7 +245,7 @@ public class MiscService implements IMiscService{
 	 * @return
 	 */
 	@Override
-	public int recvMessage(String tel, double x, double y) {
+	public String recvMessage(String tel, double x, double y) {
 		// TODO Auto-generated method stub
 		CustomerInfo c = customerInfoDao.findByTel(tel);
 		Message msg = new Message();
@@ -266,12 +266,16 @@ public class MiscService implements IMiscService{
 		try {
 			messageDao.save(msg);
 			msg.setAccepter(messageDao.findSuitAccepter(msg.getSN()));
+			if(msg.getAccepter() == 0){
+				System.out.println("查找揽收快递员失败-------------");
+				return "unsucc";
+			}
 			messageDao.update(msg);
-			return 1;
+			return "succ";
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return 0;
+			return "unsucc";
 		}
 	}
 	
@@ -288,17 +292,18 @@ public class MiscService implements IMiscService{
 	}
 
 	@Override
-	public int isReceive(int SN) {
+	public List<Message> isReceive(int SN) {
 		// TODO Auto-generated method stub
+		List<Message> items = new ArrayList<Message>();
 		try {
 			Message m = messageDao.get(SN);
 			m.setIsrecv(true);
 			messageDao.update(m);
-			return 1;
+			return items;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return 0;
+			return items;
 		}
 	}
 
@@ -340,6 +345,19 @@ public class MiscService implements IMiscService{
 			return "unsuccess";
 		}
 		
+	}
+
+	@Override
+	public List<TransNode> getNodesList(String regionCode) {
+		// TODO Auto-generated method stub
+		return transNodeDao.findByRegionCode(regionCode);
+	}
+
+	@Override
+	public List<UserInfo> getUserList() {
+		// TODO Auto-generated method stub
+		List<UserInfo> listui=userInfoDao.getUsersList();
+		return listui;
 	}
 	
 }

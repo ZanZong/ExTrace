@@ -68,6 +68,30 @@ public class UserInfoDao extends BaseDao<UserInfo, Integer> {
 		ui=super.findBy("UID", true, Restrictions.sqlRestriction("DelivePackageID = '"+ dpId + "'"));
 		System.out.println(ui.toString());
 		return ui.get(0);
+	}
+	public UserInfo getUserByUid(int uid)
+	{
+		List<UserInfo> ui=new ArrayList<UserInfo>();
+		ui=super.findBy("UID", true, Restrictions.sqlRestriction("UID = '"+ uid + "'"));
+		//System.out.println(ui.toString());
+		//System.out.print(ui.get(0));
+		return ui.get(0);
 		
+	}
+	public UserInfo getUserByUname(String uname)
+	{
+		List<UserInfo> ui=new ArrayList<UserInfo>();
+		ui=super.findBy("UID", true, Restrictions.sqlRestriction("Name = '"+ uname + "'"));
+		//System.out.println(ui.toString());
+		//System.out.print(ui.get(0));
+		return ui.get(0);
+		
+	}
+	public List<UserInfo> getUsersList() {
+		// TODO Auto-generated method stub
+		List<UserInfo> listui=new ArrayList<UserInfo>();
+		listui=findBy("URull", 0, "UID", true);
+        System.out.print(listui);
+		return listui;
 	}
 }
