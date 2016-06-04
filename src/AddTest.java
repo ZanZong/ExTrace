@@ -69,8 +69,9 @@ public class AddTest {
 	UsersPackageDao usersPackageDao;
 	@Test
 	public void fun(){
+		System.out.println(messageDao.getMsgByAccepter(11));
 		//System.out.println("accepter:" + messageDao.findSuitAccepter(9));
-		System.out.println(userInfoDao.checkUserByID(11,"123456"));
+		//System.out.println(userInfoDao.checkUserByID(11,"123456"));
 		//	System.out.println(items.isEmpty());
 		/*CustomerInfo customer = new CustomerInfo();
 		customer.setAddress("郑州市高新区科学大道100号郑州大学新校区松园");

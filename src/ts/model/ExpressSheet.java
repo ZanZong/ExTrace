@@ -6,6 +6,8 @@ import java.util.Date;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @org.hibernate.annotations.Proxy(lazy=false)
 @Table(name="ExpressSheet")
@@ -57,6 +59,7 @@ public class ExpressSheet implements Serializable {
 	@Column(name="Deliver", nullable=true, length=16)	
 	private String deliver;
 	
+	@DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss")
 	@Column(name="AccepteTime", nullable=true)	
 	private Date accepteTime;
 	
@@ -145,10 +148,12 @@ public class ExpressSheet implements Serializable {
 		return deliver;
 	}
 	
+	
 	public void setAccepteTime(Date value) {
 		this.accepteTime = value;
 	}
 	
+
 	public Date getAccepteTime() {
 		return accepteTime;
 	}

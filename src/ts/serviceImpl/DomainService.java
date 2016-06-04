@@ -133,13 +133,14 @@ public class DomainService implements IDomainService {
 
 	public Date getCurrentDate() {
 		//产生一个不带毫秒的时间,不然,SQL时间和JAVA时间格式不一致
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date tm = new Date();
 		try {
 			tm= sdf.parse(sdf.format(new Date()));
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 		}
+		System.out.println(tm.toLocaleString());
 		return tm;
 	}
 
@@ -157,6 +158,7 @@ public class DomainService implements IDomainService {
 		}
 		return list;
 	}
+	
 //	@Override
 //	public List<ExpressSheet> getExpressList(String property,
 //			String restrictions, String value) {
@@ -220,6 +222,8 @@ public class DomainService implements IDomainService {
 			System.out.println(nes.toString());
 			expressSheetDao.save(nes);
 			//放到收件包裹中
+			System.out.println("MoveExpressIntoPackage");
+			System.out.println(nes.getAccepteTime().toLocaleString());
 			MoveExpressIntoPackage(nes.getID(),pkgId);
 			return Response.ok(nes).header("EntityClass", "ExpressSheet").build(); 
 		}
@@ -446,7 +450,7 @@ public class DomainService implements IDomainService {
 			c1.setTime(df.parse(time));
 			for(PackageRoute pr : prList){
 				c2.setTime(df.parse(pr.getTm().toString()));
-				if(c1.compareTo(c2) < 0){  
+				if(c1.compareTo(c2) < 0){
 					locItems.add(new LocXY(pr.getX(), pr.getY()));
 				}
 			}
@@ -464,7 +468,7 @@ public class DomainService implements IDomainService {
 		for(PackageRoute pr : routeItems){
 			locItems.add(new LocXY((pr.getX()), pr.getY()));
 		}
-		System.out.println(locItems.get(0).toString());
+		//System.out.println(locItems.get(0).toString());
 		return locItems;
 	}
 
@@ -476,10 +480,10 @@ public class DomainService implements IDomainService {
 	}
 
 	@Override
-	public String fun(int shihu) {
+	public String fun() {
 		// TODO Auto-generated method stub
-		System.out.println("this sting:"+shihu);
-		return "haha";
+		
+		retur;
 	}
 
 	@Override
@@ -673,7 +677,7 @@ public class DomainService implements IDomainService {
 	public List<ExpressSheet> getExpressInPackage(String packageId){
 		List<ExpressSheet> list = new ArrayList<ExpressSheet>();
 		list = expressSheetDao.getListInPackage(packageId);
-		return list;		
+		return list;
 	}
 
 	@Override
@@ -937,5 +941,26 @@ public class DomainService implements IDomainService {
 	        pl.add(p);
 		}
 		return pl;
+	}
+
+	@Override
+	public String saveTransHistory(History history) {
+		// TODO Auto-generated method stub
+		TransHistory th = new TransHistory();
+		th.setActTime(getCurrentDate());
+		th.setUIDFrom(history.getIdFrom());
+		th.setUIDTo(history.getIdTo());
+		th.setX((float)history.getX());
+		th.setY((float)history.getY());
+		try {
+			th.setPkg(transPackageDao.get(history.getPackageID()));
+			transHistoryDao.save(th);
+			return "succ";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "unsucc";
+		}
+		
 	}
 }

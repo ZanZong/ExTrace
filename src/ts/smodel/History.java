@@ -13,9 +13,36 @@ public class History implements Serializable{
 	String packageID;
 	String nameFrom;
 	String nameTo;
+	int idFrom;
+	int idTo;
 	Date time;
 	double x;
 	double y;
+	/**
+	 * @return the idFrom
+	 */
+	public int getIdFrom() {
+		return idFrom;
+	}
+	/**
+	 * @param idFrom the idFrom to set
+	 */
+	public void setIdFrom(int idFrom) {
+		this.idFrom = idFrom;
+	}
+	/**
+	 * @return the idTo
+	 */
+	public int getIdTo() {
+		return idTo;
+	}
+	/**
+	 * @param idTo the idTo to set
+	 */
+	public void setIdTo(int idTo) {
+		this.idTo = idTo;
+	}
+	
 	
 	public Date getTime() {
 		return time;

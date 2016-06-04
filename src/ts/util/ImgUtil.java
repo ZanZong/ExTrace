@@ -1,6 +1,10 @@
 
 package ts.util;
 
+import java.net.URL;
+
+import com.mchange.v1.lang.GentleThread;
+
 public class ImgUtil {
 	public static String byte2hex(byte[] b) // 二进制转字符串
 	{
@@ -34,6 +38,12 @@ public class ImgUtil {
 	    } catch (Exception e) {
 	     return null;
 	    }
+	}
+	public URL getRealPath(){
+		return this.getRealPath();
+	}
+	public static void main(String[] args){
+		System.out.println(new ImgUtil().getRealPath());
 	}
 
 }

@@ -173,12 +173,13 @@ public interface IDomainService {
     @Produces({MediaType.APPLICATION_JSON })
     @Path("/getWebHistory/{expressSheetId}")
     public List<WebHistory> getWebHistory(@PathParam("expressSheetId") String expressSheetId);
-   /* @GET
-    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/saveTransHistory/{history}/{status}")
-    public Response saveTransHistory(@PathParam("history")History history, @PathParam("status")int status);
-*/
+    
+    @GET
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/saveTransHistory/{history}")
+    public String saveTransHistory(@PathParam("history")History history);
+
     //test
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -187,22 +188,22 @@ public interface IDomainService {
     public String getString(LocXY local);
     
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/fun/{name}")
-    public String fun(@PathParam("name")int shihu);
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Path("/fun")
+    public String fun();
     
   //@xingjiali
     @GET
     @Produces( MediaType.APPLICATION_JSON )
-    @Path("/getExpressInPackage/{PackageId}") 
+    @Path("/getExpressInPackage/{PackageId}") //包裹内的快递
 	public List<ExpressSheet> getExpressInPackage(@PathParam("PackageId")String packageId);
 
     //@xingjiali
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Path("/getExpressListInPackage2/{PackageId}") 
+    @Path("/getExpressListInPackage2/{PackageId}") //得到包裹中被删除的快递
 	public List<ExpressSheet> getExpressListInPackage2(@PathParam("PackageId")String packageId);
-    
+  
  //@xingjiali
     
     //快件派送
