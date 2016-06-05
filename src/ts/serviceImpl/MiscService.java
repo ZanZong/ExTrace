@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.core.Response;
 
@@ -23,6 +24,7 @@ import ts.model.TransNode;
 import ts.model.UserInfo;
 import ts.serviceInterface.IMiscService;
 import ts.util.JSONObjectUtils;
+import ts.util.PostSplite;
 
 public class MiscService implements IMiscService{
 	//TransNodeCatalog nodes;	//自己做的缓存和重定向先不要了,用Hibernate缓存对付一下，以后加上去
@@ -79,11 +81,7 @@ public class MiscService implements IMiscService{
 //		regions.Load();
 	}
 
-	@Override
-	public TransNode getNode(String code) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	@Override
 	public List<TransNode> getNodesList(String regionCode, int type) {
@@ -334,10 +332,30 @@ public class MiscService implements IMiscService{
 	}
 
 	@Override
-	public String saveUserInfo(UserInfo ui) {
+	public String saveUserInfo(String ui) {
 		// TODO Auto-generated method stub
+		System.out.println("liushuo"+ui);
+		
 		try {
-			userInfoDao.update(ui);
+		Map<String,String> uri = PostSplite.postchange(ui);
+			UserInfo us=new UserInfo();
+		    us.setUID(Integer.parseInt(uri.get("uid")));
+		    System.out.println(uri.get("uid"));
+		    us.setPWD(uri.get("pwd"));
+		    us.setName(uri.get("name"));
+		    us.setURull(Integer.parseInt(uri.get("urull")));
+		    us.setTelCode(uri.get("telcode"));
+		    us.setStatus(Integer.parseInt(uri.get("status")));
+		    us.setDptID(uri.get("dptid"));
+		    us.setReceivePackageID(uri.get("receivepackageid"));
+		    us.setDelivePackageID(uri.get("delivepackageid"));
+		    us.setTransPackageID(uri.get("transpackageid"));
+		    
+		    userInfoDao.update(us);
+			
+	    	
+	    	System.out.println("liushuo");
+	    	//userInfoDao.update(us);
 			return "success";
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -346,7 +364,6 @@ public class MiscService implements IMiscService{
 		}
 		
 	}
-
 	@Override
 	public List<TransNode> getNodesList(String regionCode) {
 		// TODO Auto-generated method stub
@@ -360,4 +377,50 @@ public class MiscService implements IMiscService{
 		return listui;
 	}
 	
+	
+	//liushuo
+
+	@Override
+	public String saveNode(String transnodeid,String nodename, String nodetype,  String telcode,String regioncode, float x, float y) {
+		// TODO Auto-generated method stub
+		System.out.println("liushuo"+nodename);
+		TransNode tn = new TransNode();
+		tn.setID(transnodeid);
+		tn.setNodeName(nodename);
+		tn.setNodeType(Integer.parseInt(nodetype));
+		tn.setRegionCode(regioncode);
+		tn.setTelCode(telcode);
+		tn.setX(x);
+		tn.setY(y);
+		
+		try {
+			transNodeDao.saveOnly(tn);
+			System.out.println(tn.getID());
+			return "succ";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "unsucc";
+		}
+	}
+	
+	@Override
+	public TransNode getNode(String code) {
+		// TODO Auto-generated method stub
+		return transNodeDao.get(code);
+	}
+
+	@Override
+	public String delete(String nodeid) {
+		// TODO Auto-generated method stub
+		try {
+			transNodeDao.removeById(nodeid);
+			return "success";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "default";
+		}
+		
+	}
 }

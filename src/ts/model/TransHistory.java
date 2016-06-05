@@ -46,16 +46,16 @@ public class TransHistory implements Serializable {
 	private Date actTime;
 	
 	@Column(name="UIDFrom", nullable=false, length=10)	
-	private int UIDFrom;
+	private String UIDFrom;
 	
 	@Column(name="UIDTo", nullable=false, length=10)	
-	private int UIDTo;
+	private String UIDTo;
 	
 	@Column(name="x", nullable=true)	
-	private Float x;
+	private double x;
 	
 	@Column(name="y", nullable=true)	
-	private Float y;
+	private double y;
 	
 	public void setSN(int value) {
 		this.SN = value;
@@ -77,35 +77,35 @@ public class TransHistory implements Serializable {
 		return actTime;
 	}
 	
-	public void setUIDFrom(int value) {
+	public void setUIDFrom(String value) {
 		this.UIDFrom = value;
 	}
 	
-	public int getUIDFrom() {
+	public String getUIDFrom() {
 		return UIDFrom;
 	}
 	
-	public void setUIDTo(int value) {
+	public void setUIDTo(String value) {
 		this.UIDTo = value;
 	}
 	
-	public int getUIDTo() {
+	public String getUIDTo() {
 		return UIDTo;
 	}
 	
-	public void setX(Float value) {
+	public void setX(double value) {
 		this.x = value;
 	}
 	
-	public Float getX() {
+	public double getX() {
 		return x;
 	}
 	
-	public void setY(Float value) {
+	public void setY(double value) {
 		this.y = value;
 	}
 	
-	public Float getY() {
+	public double getY() {
 		return y;
 	}
 	

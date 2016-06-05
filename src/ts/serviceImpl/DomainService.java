@@ -199,7 +199,10 @@ public class DomainService implements IDomainService {
 		ExpressSheet es = null;
 		try{
 			es = expressSheetDao.get(id);
-		} catch (Exception e1) {}
+			System.out.println("es:"+es);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 
 		if(es != null){
 //			if(es.getStatus() != 0)
@@ -224,11 +227,24 @@ public class DomainService implements IDomainService {
 			//放到收件包裹中
 			System.out.println("MoveExpressIntoPackage");
 			System.out.println(nes.getAccepteTime().toLocaleString());
+			
+			TransNode tn = transNodeDao.get(userInfoDao.get(uid).getDptID());
+			System.out.println("newExpressSheet:" + tn);
+			TransHistory th = new TransHistory();
+			th.setActTime(getCurrentDate());
+			th.setPkg(transPackageDao.get(pkgId));
+			th.setUIDFrom(tn.getRegionCode());//from代表被拆的包
+			th.setUIDTo("已揽收");
+			th.setX(tn.getX());
+			th.setY(tn.getY());
+			transHistoryDao.save(th);
+			System.out.println(th.toString()+"插入拆包历史----------");
 			MoveExpressIntoPackage(nes.getID(),pkgId);
 			return Response.ok(nes).header("EntityClass", "ExpressSheet").build(); 
-		}
+	}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			return Response.serverError().entity(e.getMessage()).build(); 
 		}
 	}
@@ -274,7 +290,7 @@ public class DomainService implements IDomainService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	public boolean MoveExpressIntoPackage(String id, String targetPkgId) {
 		TransPackage targetPkg = transPackageDao.get(targetPkgId);
 		if((targetPkg.getStatus() > 0) && (targetPkg.getStatus() < 3)){	//包裹的状态快点定义,打开的包裹或者货篮才能操作==================================================================
@@ -286,6 +302,87 @@ public class DomainService implements IDomainService {
 		pkg_add.setExpress(expressSheetDao.get(id));
 		pkg_add.setStatus(TransPackageContent.STATUS.STATUS_ACTIVE);
 		transPackageContentDao.save(pkg_add); 
+		
+	/*	//插入历史
+		TransNode tn = transNodeDao
+				.get(userInfoDao
+				.get(usersPackageDao
+				.getUidByPackage(targetPkgId))
+				.getDptID());
+		System.out.println("unpackTransPackage:" + tn);
+		TransHistory th = new TransHistory();
+		th.setActTime(getCurrentDate());
+		th.setPkg(targetPkg);
+		th.setUIDFrom(tn.getRegionCode());//from代表被拆的包
+		th.setUIDTo("拆包");
+		th.setX(tn.getX());
+		th.setY(tn.getY());
+		transHistoryDao.save(th);
+		System.out.println("插入拆包历史----------");*/
+		
+		return true;
+	}
+
+	public boolean MoveExpressIntoPackage(String uri) {
+		java.util.Map<String,String> map = PostSplite.postchange(uri);
+		String pkid = map.get("pkid");
+		String[] expresslist = map.get("list").split(",");
+		TransPackage targetPkg = transPackageDao.get(pkid);
+		if((targetPkg.getStatus() > 0) && (targetPkg.getStatus() < 3)){	//包裹的状态快点定义,打开的包裹或者货篮才能操作==================================================================
+			return false;
+		}
+		
+		//关闭包裹
+		for(String exid : expresslist){
+			TransPackageContent tpc = transPackageContentDao.getExistPackage(exid);
+			System.out.println("tpc"+tpc);
+			TransPackage tp = tpc.getPkg();
+			tp.setStatus(2);
+			transPackageDao.update(tp);
+		}
+				
+		for(String exid : expresslist){
+			List<TransPackageContent> items = transPackageContentDao.getListPackageContent(exid);
+			for(TransPackageContent i : items){
+				i.setStatus(TransPackageContent.STATUS.STATUS_OUTOF_PACKAGE);
+				transPackageContentDao.update(i);
+			}
+		}
+		System.out.println(expresslist.toString());
+		//插入历史
+		TransNode tn = null;
+		System.out.println("pkid:"+pkid);
+		try {
+			int id = usersPackageDao.getUidByPackage(pkid);
+			String dptid = userInfoDao.get(id).getDptID();
+			tn = transNodeDao.get(dptid);
+			System.out.println("id:"+id+"\n"+"dptid"+dptid);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("unpackTransPackage:" + tn);
+		TransHistory th = new TransHistory();
+		th.setActTime(getCurrentDate());
+		th.setPkg(targetPkg);
+		th.setUIDFrom(tn.getRegionCode());//from代表被拆的包
+		th.setUIDTo("打包");
+		th.setX(tn.getX());
+		th.setY(tn.getY());
+		transHistoryDao.save(th);
+		System.out.println("插入打包历史----------");
+		/*
+		 * 修改6-4 13：02 zong
+		 */
+		
+		
+		for(String exid : expresslist){
+			TransPackageContent pkg_add = new TransPackageContent();
+			pkg_add.setPkg(targetPkg);
+			pkg_add.setExpress(expressSheetDao.get(exid));
+			pkg_add.setStatus(TransPackageContent.STATUS.STATUS_ACTIVE);
+			transPackageContentDao.save(pkg_add);
+		}
 		return true;
 	}
 
@@ -356,7 +453,8 @@ public class DomainService implements IDomainService {
 	@Override
 	public Response getTransPackage(String id) {
 		TransPackage es = transPackageDao.get(id);
-		TransPackage stp =new TransPackage();
+		System.out.println(es.toString());
+		TransPackage stp =	new TransPackage();
 		stp.setCreateTime(es.getCreateTime());
 		stp.setID(es.getID());
 		stp.setSourceNode(es.getSourceNode());
@@ -388,13 +486,19 @@ public class DomainService implements IDomainService {
 			TransPackage tp=new TransPackage();
 			transPackageDao.unpackTransPackage(packageId);
 			tp=transPackageDao.get(packageId);
-			TransPackage stp = new TransPackage();
-			stp.setCreateTime(tp.getCreateTime());
-			stp.setID(tp.getID());
-			stp.setSourceNode(tp.getSourceNode());
-			stp.setTargetNode(tp.getTargetNode());
-			stp.setStatus(tp.getStatus());
-			return Response.ok(stp).header("EntityClass", "O_TransPackage").build(); 
+			//插入历史
+			TransNode tn = transNodeDao.get(userInfoDao.get(usersPackageDao.getUidByPackage(packageId)).getDptID());
+			System.out.println("unpackTransPackage:" + tn);
+			TransHistory th = new TransHistory();
+			th.setActTime(getCurrentDate());
+			th.setPkg(tp);
+			th.setUIDFrom(tn.getRegionCode());//from代表被拆的包
+			th.setUIDTo("拆包");
+			th.setX(tn.getX());
+			th.setY(tn.getY());
+			transHistoryDao.save(th);
+			System.out.println("插入拆包历史----------");
+			return Response.ok(tp).header("EntityClass", "O_TransPackage").build(); 
 		}catch(Exception e){
 			return Response.serverError().entity(e.getMessage()).build();
 		}
@@ -482,8 +586,8 @@ public class DomainService implements IDomainService {
 	@Override
 	public String fun() {
 		// TODO Auto-generated method stub
-		
-		retur;
+		ImgUtil ui = new ImgUtil();
+		return ui.getImgPath();
 	}
 
 	@Override
@@ -517,8 +621,15 @@ public class DomainService implements IDomainService {
 				for(TransHistory th : thList){
 					History m = new History();
 					m.setPackageID(th.getPkg().getID());
-					m.setNameFrom(userInfoDao.get(th.getUIDFrom()).getName());
-					m.setNameTo(userInfoDao.get(th.getUIDTo()).getName());
+					if(th.getUIDFrom().equals("打包")){
+						m.setNameFrom("打包");
+						m.setNameTo(transNodeDao.get(th.getUIDTo()).getNodeName());
+					}
+						
+					if(th.getUIDTo().equals("拆包")){
+						m.setNameFrom("拆包");
+						m.setNameTo(transNodeDao.get(th.getUIDFrom()).getNodeName());
+					}
 					m.setX(th.getX());
 					m.setY(th.getY());
 					m.setTime(th.getActTime());
@@ -590,7 +701,7 @@ public class DomainService implements IDomainService {
 		return es;
 	}
 
-	@Override
+	/*@Override
 	public Response unpackaTransPackage(String packageId) {
 		// TODO Auto-generated method stub
 		try{
@@ -601,7 +712,7 @@ public class DomainService implements IDomainService {
 		}catch(Exception e){
 			return Response.serverError().entity(e.getMessage()).build();
 		}
-	}
+	}*/
 
 	@Override
 	public List<ExpressSheet> getExpressListInPackage2(String packageId) {
@@ -625,13 +736,21 @@ public class DomainService implements IDomainService {
 		List<WebHistory> whs = new ArrayList<WebHistory>();
 		List<TransHistory> thList;
 		List<TransPackage> pkgs = transPackageDao.getAllPackage(expressSheetId);
+		System.out.println("pkgsize:" + pkgs.size());
 			for(TransPackage item : pkgs){
 				thList = transHistoryDao.getPackageHistory(item.getID());
 				for(TransHistory th : thList){
 					WebHistory m = new WebHistory();
 					m.setPackageID(th.getPkg().getID());
-					m.setNameFrom(userInfoDao.get(th.getUIDFrom()).getName());
-					m.setNameTo(userInfoDao.get(th.getUIDTo()).getName());
+					if(th.getUIDFrom().equals("打包")){
+						m.setNameFrom("打包");
+						m.setNameTo(transNodeDao.get(th.getUIDTo()).getNodeName());
+					}
+						
+					if(th.getUIDTo().equals("拆包")){
+						m.setNameFrom("拆包");
+						m.setNameTo(transNodeDao.get(th.getUIDFrom()).getNodeName());
+					}
 					m.setAddress(BaiduApiUtils.getFormatted_address(th.getY(), th.getX()));
 					/*m.setX(th.getX());
 					m.setY(th.getY());*/
@@ -659,9 +778,8 @@ public class DomainService implements IDomainService {
 			e1.printStackTrace();
 		}
 		System.out.println(pic);
-		String url = "C:\\Extrace\\userdata\\";
+		String url = new ImgUtil().getImgPath();
 		File a = new File(url + id + ".jpg");
-		
 		try {
 			FileOutputStream out = new FileOutputStream(a);
 			out.write(src);
@@ -829,7 +947,7 @@ public class DomainService implements IDomainService {
 			System.out.println(uri.get("time1"));
 			System.out.println(uri.get("pkgtype1"));
 			System.out.println(tp1);
-			transPackageDao.save(tp1);
+			transPackageDao.saveOnly(tp1);
 			
 			//添加userpackage
 			UsersPackage up1=new UsersPackage();
@@ -854,7 +972,7 @@ public class DomainService implements IDomainService {
 			System.out.println(uri.get("time2"));
 			System.out.println(uri.get("pkgtype2"));
 			System.out.println(tp2);
-			transPackageDao.save(tp2);
+			transPackageDao.saveOnly(tp2);
 			
 			//添加userpackage
 			UsersPackage up2=new UsersPackage();
@@ -879,7 +997,7 @@ public class DomainService implements IDomainService {
 			System.out.println(uri.get("time3"));
 			System.out.println(uri.get("pkgtype3"));
 			System.out.println(tp3);
-			transPackageDao.save(tp3);
+			transPackageDao.saveOnly(tp3);
 			
 			//添加userpackage
 			UsersPackage up3=new UsersPackage();
@@ -893,7 +1011,6 @@ public class DomainService implements IDomainService {
 			e.printStackTrace();
 		}
 		return "成功添加包裹并分配！"; 
-		
 	}
 
 	@Override
@@ -948,8 +1065,8 @@ public class DomainService implements IDomainService {
 		// TODO Auto-generated method stub
 		TransHistory th = new TransHistory();
 		th.setActTime(getCurrentDate());
-		th.setUIDFrom(history.getIdFrom());
-		th.setUIDTo(history.getIdTo());
+		/*th.setUIDFrom(history.getIdFrom());
+		th.setUIDTo(history.getIdTo());*/
 		th.setX((float)history.getX());
 		th.setY((float)history.getY());
 		try {
@@ -961,6 +1078,74 @@ public class DomainService implements IDomainService {
 			e.printStackTrace();
 			return "unsucc";
 		}
-		
 	}
+
+	@Override
+	public String getPicPath(String expressSheet) {
+		// TODO Auto-generated method stub
+		String url = new ImgUtil().getImgPath();
+		url += expressSheet + ".jpg";
+		File file = new File(url);
+		if(file.exists())
+			return url;
+		else 
+			return "there is no image of this expresssheet!"; 
+	}
+	@Override
+	public String allocationForDelver(String nodeid, String userid) {
+		UserInfo user = userInfoDao.get(Integer.parseInt(userid));
+		List<ExpressSheet> listexpress = transPackageContentDao
+				.getAllExpressSheetNow(user.getTransPackageID());
+		List<UserInfo> list = userInfoDao.getAllCourierOnNode(nodeid);
+		int presi = listexpress.size()/list.size();
+		int j = 0;
+		for(UserInfo item:list){
+			for(int i = 0;i < presi;i++){
+				MoveExpressIntoPackage(listexpress.get(j++).getID(),
+						item.getDelivePackageID());
+			}
+		}
+		
+		int i = 0;
+		for(;j < listexpress.size();j++){
+			MoveExpressIntoPackage(listexpress.get(j).getID(),
+					list.get(i).getDelivePackageID());
+		}
+		TransPackage pp = transPackageDao.get(user.getReceivePackageID());
+		//关闭包裹
+		pp.setStatus(2);
+		transPackageDao.update(pp);
+		
+		//插入历史
+		TransNode tn = transNodeDao.get(user.getDptID());
+		TransHistory th = new TransHistory();
+		th.setActTime(getCurrentDate());
+		th.setPkg(pp);
+		th.setUIDFrom(tn.getRegionCode());//from代表被拆的包
+		th.setUIDTo("拆包");
+		th.setX(tn.getX());
+		th.setY(tn.getY());
+		transHistoryDao.save(th);
+		System.out.println("插入拆包历史----------");
+		return "Success";
+	}
+
+	@Override
+	public List<UserInfo> getTransUserList(String nodeid) {
+		List<UserInfo> userinfo = userInfoDao.getAllTranspoterOnNode(nodeid);
+		return userinfo;
+	}
+
+	@Override
+	public List<ExpressSheet> getAllExpressSheetOld(String pkid) {
+		// TODO Auto-generated method stub
+		return transPackageContentDao.getAllExpressSheetOld(pkid);
+	}
+
+	@Override
+	public List<ExpressSheet> getAllExpressSheetNow(String pkid) {
+		// TODO Auto-generated method stub
+		return transPackageContentDao.getAllExpressSheetNow(pkid);
+	}
+	
 }

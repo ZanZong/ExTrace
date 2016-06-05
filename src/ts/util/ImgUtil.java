@@ -1,6 +1,7 @@
 
 package ts.util;
 
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import com.mchange.v1.lang.GentleThread;
@@ -39,11 +40,27 @@ public class ImgUtil {
 	     return null;
 	    }
 	}
-	public URL getRealPath(){
-		return this.getRealPath();
+	public String getImgPath(){
+		String url = null;
+		try {
+			url = this.getClass().getResource("").toURI().getPath().toString();
+		} catch (URISyntaxException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.out.println("获取路径异常-------");
+		} 
+		
+		String s2 = null;
+		try {
+			s2 = url.substring(1).split("/Extrace")[0];
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("路径解析错误----------------");
+		}
+		//s2.replace("%20", " ");
+		s2 += "/ExtraceWeb/userdata/";
+		return s2;
 	}
-	public static void main(String[] args){
-		System.out.println(new ImgUtil().getRealPath());
-	}
-
+	
 }

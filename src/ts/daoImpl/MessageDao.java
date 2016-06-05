@@ -75,7 +75,7 @@ public class MessageDao extends BaseDao<Message, Integer> {
 	}
 	
 	public int findSuitAccepter(int SN){
-		List<UserInfo> users = userInfoDao.getAll();
+		List<UserInfo> users = userInfoDao.getAllDeliverAndRecver();
 		List<PackageRoute> pkgRoute = new ArrayList<PackageRoute>();
 		for(UserInfo item : users){
 			//System.out.println(item.getUID());

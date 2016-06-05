@@ -57,4 +57,5 @@ public class TransHistoryDao extends BaseDao<TransHistory,Integer> {
 			return Response.serverError().entity(e.getMessage()).build();
 		}
 	}*/
+	//public boolean saveTransHistory()
 }

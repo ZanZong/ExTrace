@@ -21,11 +21,7 @@ import ts.model.UserInfo;
 
 @Path("/Misc")
 public interface IMiscService {
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Path("/getNode/{NodeCode}") 
-	public TransNode getNode(@PathParam("NodeCode")String code);
-    
+   
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("/getNodesList/{RegionCode}/{Type}") 
@@ -128,16 +124,17 @@ public interface IMiscService {
     @Path("/getUser/{uid}/{psw}")
     public UserInfo getUser(@PathParam("uid")int uid,@PathParam("psw") String psw);
 	
-	//xingjiali
-	@GET
-    @Produces({ MediaType.APPLICATION_JSON })
+	//liushuo
+	@POST
+    @Produces({MediaType.APPLICATION_JSON})
     @Path("/getUserInfo/{uid}") 
 	public UserInfo getUserInfo(@PathParam("uid") int uid);
 	
-	@GET
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Path("saveUserInfo") 
-	public String saveUserInfo(UserInfo ui);
+	@POST
+	//@Consumes({ MediaType.TEXT_PLAIN})
+	@Produces({MediaType.TEXT_PLAIN,MediaType.APPLICATION_JSON})
+    @Path("/saveUserInfo") 
+	public String saveUserInfo(String ui); 
 	
 	@GET
     @Produces( MediaType.APPLICATION_JSON )
@@ -151,26 +148,26 @@ public interface IMiscService {
 	 public List<UserInfo> getUserList();
 	
 	 //liushuo
-		@GET
-	    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	    @Path("/getNode/{NodeCode}") 
-		public TransNode getNode(@PathParam("NodeCode")String code);
-		
-	    @GET
-	    @Produces({MediaType.TEXT_PLAIN})
-	    @Path("/saveNode/{transnodeid}/{nodename}/{nodetype}/{telcode}/{regioncode}/{x}/{y}")
-	    public String saveNode(@PathParam("transnodeid")String transnodeid,
-	    		@PathParam("nodename")String nodename, 
-	    		@PathParam("nodetype")String nodetype,
-	    		@PathParam("telcode")String telcode,
-	    		@PathParam("regioncode")String regioncode,  
-	    		@PathParam("x") float x, 
-	    		@PathParam("y") float y);
-	    
-	    @GET
-	    @Produces({MediaType.TEXT_PLAIN})
-	    @Path("/deleteNode/{nodeid}")
-	    public String delete(@PathParam("nodeid")String nodeid);
+	@GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Path("/getNode/{NodeCode}") 
+	public TransNode getNode(@PathParam("NodeCode")String code);
+	
+    @GET
+    @Produces({MediaType.TEXT_PLAIN})
+    @Path("/saveNode/{transnodeid}/{nodename}/{nodetype}/{telcode}/{regioncode}/{x}/{y}")
+    public String saveNode(@PathParam("transnodeid")String transnodeid,
+    		@PathParam("nodename")String nodename, 
+    		@PathParam("nodetype")String nodetype,
+    		@PathParam("telcode")String telcode,
+    		@PathParam("regioncode")String regioncode,  
+    		@PathParam("x") float x, 
+    		@PathParam("y") float y);
+    
+    @GET
+    @Produces({MediaType.TEXT_PLAIN})
+    @Path("/deleteNode/{nodeid}")
+    public String delete(@PathParam("nodeid")String nodeid);
 	 
 	public void RefreshSessionList();
 	public void CreateWorkSession(int uid);

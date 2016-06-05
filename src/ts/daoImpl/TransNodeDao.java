@@ -2,6 +2,7 @@ package ts.daoImpl;
 
 import java.util.List;
 
+import org.hibernate.criterion.Restrictions;
 import org.springframework.util.Assert;
 
 import ts.daoBase.BaseDao;
@@ -17,7 +18,8 @@ public class TransNodeDao extends BaseDao<TransNode, String>{
         return findBy("regionCode", region_code, "nodeName", true);
 	}
 	public String getRegionString(String id){
-		return findBy("id",id,"id",true).get(0).getNodeName();
+		/*List<TransNode> tns = getTransNodeByNode(id);*/
+		return  get(id).getNodeName();
 	}
 	public TransNode getTransNodeByName(String source) {
 		// TODO Auto-generated method stub

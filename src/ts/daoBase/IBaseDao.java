@@ -52,6 +52,8 @@ public interface IBaseDao<T,PK extends Serializable> {
      */
     public void save(T entity);
     
+    //xingjiali
+    public void saveOnly(T entity); 
     /**
      * 在不同的session中关联修改过的托管对象
      */

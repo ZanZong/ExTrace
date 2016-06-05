@@ -76,6 +76,33 @@ public class TransPackageContentDao extends BaseDao<TransPackageContent,Integer>
 		/*System.out.println(elist);*/
 		return elist;		
 	}
-
+//shihu
+	public List<ExpressSheet> getAllExpressSheetNow(String packageId){
+		List<TransPackageContent> list = new ArrayList<TransPackageContent>();
+		List<ExpressSheet> elList = new ArrayList<ExpressSheet>();
+		list = super.findBy("SN", true, Restrictions.sqlRestriction("PackageID = '"+packageId+"'" +" and "+
+					"Status='"+0+"'"));
+		for(TransPackageContent pc : list){
+			elList.add(pc.getExpress());
+		}
+		return elList;
+	}
+	
+	public List<ExpressSheet> getAllExpressSheetOld(String packageid){
+		List<TransPackageContent> list = new ArrayList<TransPackageContent>();
+		List<ExpressSheet> elList = new ArrayList<ExpressSheet>();
+		list = super.findBy("SN", true, Restrictions.sqlRestriction("PackageID = '"+packageid+"'" +" and "+
+					"Status='"+1+"'"));
+		for(TransPackageContent pc : list){
+			elList.add(pc.getExpress());
+		}
+		return elList;
+	}
+	public TransPackageContent getExistPackage(String expresssid){
+		List<TransPackageContent> list = findBy("SN", true, Restrictions.sqlRestriction("expressid='" + expresssid + "' and status=0"));
+		if(list.size() > 0)
+			return list.get(0);
+		else return null;
+	}
 	
 }

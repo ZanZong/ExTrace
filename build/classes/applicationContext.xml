@@ -112,6 +112,7 @@
 				<property name="transPackageContentDao" ref="transPackageContentDao"></property>
 				<property name="userInfoDao" ref="userInfoDao"></property>
 				<property name="transNodeDao" ref="transNodeDao"></property>
+				<property name="usersPackageDao" ref="usersPackageDao"></property>
 			</bean>
 		</jaxrs:serviceBeans>
 

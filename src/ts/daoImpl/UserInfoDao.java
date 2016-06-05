@@ -85,7 +85,6 @@ public class UserInfoDao extends BaseDao<UserInfo, Integer> {
 		//System.out.println(ui.toString());
 		//System.out.print(ui.get(0));
 		return ui.get(0);
-		
 	}
 	public List<UserInfo> getUsersList() {
 		// TODO Auto-generated method stub
@@ -94,4 +93,21 @@ public class UserInfoDao extends BaseDao<UserInfo, Integer> {
         System.out.print(listui);
 		return listui;
 	}
+	//shihu
+	public List<UserInfo> getAllCourierOnNode(String dpid){
+		List<UserInfo> ui = new ArrayList<>();
+		ui = super.findBy("UID",true, Restrictions.sqlRestriction("Status= '" +1+ "'" +" and  DptID = '"+dpid+"'"
+				+" and RUll ='"+1+"'"));
+		return ui;
+	}
+	public List<UserInfo> getAllTranspoterOnNode(String dpid){
+		List<UserInfo> ui = new ArrayList<>();
+		ui = super.findBy("UID",true, Restrictions.sqlRestriction("Status= '" +2+ "'" +" and  DptID = '"+dpid+"'"
+				+" and RUll ='"+1+"'"));
+		return ui;
+	}
+	public List<UserInfo> getAllDeliverAndRecver(){
+		return super.findBy("UID", true, Restrictions.sqlRestriction("Status=1"));
+	}
+	
 }

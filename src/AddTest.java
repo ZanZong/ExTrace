@@ -69,7 +69,8 @@ public class AddTest {
 	UsersPackageDao usersPackageDao;
 	@Test
 	public void fun(){
-		System.out.println(messageDao.getMsgByAccepter(11));
+		System.out.println(transPackageContentDao.getExistPackage("20254"));
+		//System.out.println(messageDao.getMsgByAccepter(11));
 		//System.out.println("accepter:" + messageDao.findSuitAccepter(9));
 		//System.out.println(userInfoDao.checkUserByID(11,"123456"));
 		//	System.out.println(items.isEmpty());

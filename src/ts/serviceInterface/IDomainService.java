@@ -15,11 +15,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.hibernate.annotations.Parameter;
+import org.jboss.logging.annotations.Param;
 
 import ts.model.ExpressSheet;
 import ts.model.PackageRoute;
 import ts.model.TransHistory;
 import ts.model.TransPackage;
+import ts.model.UserInfo;
 import ts.smodel.History;
 import ts.smodel.LocXY;
 import ts.smodel.PackageNamePair;
@@ -108,6 +110,12 @@ public interface IDomainService {
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Path("/MoveExpressIntoPackage/id/{id}/targetPkgId/{targetPkgId}") //将快递移动到包裹中
     public boolean MoveExpressIntoPackage(@PathParam("id")String id, @PathParam("targetPkgId")String targetPkgId);
+   
+    @POST
+    @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON })
+    @Path("/MoveExpressIntoPackage") //将快递移动到包裹中
+    public boolean MoveExpressIntoPackage(String uri);
+    
     //包裹操作访问接口=======================================================================
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -218,12 +226,12 @@ public interface IDomainService {
     @Path("/signExpress/{expressId}")
     public ExpressSheet  signExpress(@PathParam("expressId")String expressId);
     
-    //拆包
+/*    //拆包
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("/unpackaTransPackage/{packageId}")
-    public Response unpackaTransPackage(@PathParam("packageId")String packageId);
+    public Response unpackaTransPackage(@PathParam("packageId")String packageId);*/
     //得到tranPackagenode的发送地区名字和接收名字
     
     //xingjiali
@@ -276,8 +284,36 @@ public interface IDomainService {
     @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON})
     @Path("/savePic") 
 	public String savePic(String pic);
-
-	
     
-
+	@GET
+	@Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON})
+	@Path("/getPicPath/{expressSheet}")
+	public String getPicPath(@PathParam("expressSheet")String expressSheet);
+    
+	//分派快递
+	@GET
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON})
+    @Path("/allocationForDelver/{nodeId}/{userId}")
+    public String allocationForDelver(@PathParam("nodeId")String nodeid,
+    		@PathParam("userId")String userid);
+    
+    @GET
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON})
+    @Path("/getTransUserList/{nodeId}")
+    public List<UserInfo> getTransUserList(@PathParam("nodeId")String nodeid);
+    
+    @GET
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON})
+    @Path("/getAllExpressSheetOld/{pkId}")
+    public List<ExpressSheet> getAllExpressSheetOld(@PathParam("pkId")String pkid); 
+    
+    @GET
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON})
+    @Path("/getAllExpressSheetNow/{pkId}")
+    public List<ExpressSheet> getAllExpressSheetNow(@PathParam("pkId")String pkid); 
+    
 }
